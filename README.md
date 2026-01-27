@@ -67,16 +67,6 @@ The demo showcases an invoice processing pipeline:
 ```
 docops-agent/
 ├── docs/                   # Documentation
-│   ├── PROJECT_PLAN.md
-│   ├── SYSTEM_DESIGN.md
-│   ├── ARCHITECTURE.md
-│   ├── TECH_STACK.md
-│   ├── DOCKER_SETUP.md
-│   ├── DATA_MODELS.md
-│   ├── API_SPEC.md
-│   ├── DEMO_SCENARIO.md
-│   ├── COMMIT_PLAN.md
-│   └── PROJECT_STRUCTURE.md
 ├── src/
 │   ├── api/               # FastAPI application
 │   ├── agents/            # LangGraph agents
