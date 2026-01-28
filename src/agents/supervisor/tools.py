@@ -10,7 +10,7 @@ from datetime import datetime
 from src.agents.state import DocumentType, ApprovalStatus
 from src.services.storage import StorageService
 from src.services.database import DatabaseService
-from src.models import Document, ApprovalRequest
+from src.models import Document, Approval
 
 logger = logging.getLogger(__name__)
 
