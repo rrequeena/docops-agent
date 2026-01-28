@@ -50,7 +50,7 @@ class Document(Base):
     processed_at = Column(DateTime, nullable=True)
     size_bytes = Column(BigInteger, nullable=False)
     minio_key = Column(String(512), nullable=True)
-    metadata = Column(JSON, nullable=True)
+    doc_metadata = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
