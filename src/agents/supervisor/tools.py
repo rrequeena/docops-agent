@@ -45,7 +45,7 @@ async def route_task(
 async def request_approval(
     task_id: str,
     context: Dict[str, Any],
-    db_client: Optional[DatabaseClient] = None,
+    db_client: Optional[DatabaseService] = None,
 ) -> Dict[str, Any]:
     """
     Request human approval for a task.
@@ -122,7 +122,7 @@ async def log_trace(
 
 async def get_document_metadata(
     document_id: str,
-    db_client: Optional[DatabaseClient] = None,
+    db_client: Optional[DatabaseService] = None,
 ) -> Dict[str, Any]:
     """
     Retrieve document metadata.
@@ -146,7 +146,7 @@ async def get_document_metadata(
 
 async def check_document_status(
     document_id: str,
-    db_client: Optional[DatabaseClient] = None,
+    db_client: Optional[DatabaseService] = None,
 ) -> str:
     """
     Check the current status of a document.
