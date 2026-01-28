@@ -8,8 +8,8 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 
 from src.agents.state import DocumentType, ApprovalStatus
-from src.services.storage import MinIOClient
-from src.services.database import DatabaseClient
+from src.services.storage import StorageService
+from src.services.database import DatabaseService
 from src.models import Document, ApprovalRequest
 
 logger = logging.getLogger(__name__)
