@@ -3,75 +3,133 @@ Extraction schemas for different document types.
 """
 
 from typing import List, Optional, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from datetime import date
+from decimal import Decimal
 
 
 class LineItem(BaseModel):
     """Represents a line item in an invoice or receipt."""
+    item_number: Optional[int] = None
     description: str
-    quantity: float = 1.0
-    unit_price: float
-    amount: float
+    quantity: Decimal = Field(..., decimal_places=2)
+    unit_price: Decimal = Field(..., decimal_places=2)
+    total: Decimal = Field(..., decimal_places=2)
+    unit: str = Field(default="ea")
+    sku: Optional[str] = None
     tax_rate: Optional[float] = 0.0
 
 
 class InvoiceExtraction(BaseModel):
     """Schema for invoice extraction."""
-    invoice_number: Optional[str] = None
-    invoice_date: Optional[date] = None
-    vendor_name: Optional[str] = None
+    vendor_name: str
     vendor_address: Optional[str] = None
+    vendor_email: Optional[str] = None
+    vendor_phone: Optional[str] = None
     vendor_tax_id: Optional[str] = None
+    invoice_number: str
+    invoice_date: Optional[date] = None
+    due_date: Optional[date] = None
     customer_name: Optional[str] = None
     customer_address: Optional[str] = None
     line_items: List[LineItem] = Field(default_factory=list)
-    subtotal: Optional[float] = None
-    tax_amount: Optional[float] = None
-    tax_rate: Optional[float] = None
-    total: Optional[float] = None
+    subtotal: Optional[Decimal] = None
+    tax: Decimal = Field(default=Decimal("0.00"))
+    tax_rate: Optional[Decimal] = Field(None, decimal_places=4)
+    total: Optional[Decimal] = None
     currency: str = "USD"
     payment_terms: Optional[str] = None
-    due_date: Optional[date] = None
     notes: Optional[str] = None
+
+    @field_validator('line_items', mode='before')
+    @classmethod
+    def validate_line_items(cls, v):
+        if not v:
+            raise ValueError('At least one line item required')
+        return v
+
+
+class Party(BaseModel):
+    """Contract party information."""
+    name: str
+    role: str
+    address: Optional[str] = None
+    contact: Optional[str] = None
+
+
+class Clause(BaseModel):
+    """Contract clause."""
+    number: str
+    title: str
+    content: str
+    page_reference: Optional[int] = None
+
+
+class Obligation(BaseModel):
+    """Contractual obligation."""
+    party: str
+    description: str
+    due_date: Optional[date] = None
 
 
 class ContractExtraction(BaseModel):
     """Schema for contract extraction."""
+    title: str
+    contract_type: Optional[str] = None
     contract_number: Optional[str] = None
     contract_date: Optional[date] = None
     effective_date: Optional[date] = None
     expiration_date: Optional[date] = None
-    parties: List[str] = Field(default_factory=list)
-    title: Optional[str] = None
-    clauses: List[dict] = Field(default_factory=list)
-    obligations: List[str] = Field(default_factory=list)
+    parties: List[Party] = Field(default_factory=list)
+    clauses: List[Clause] = Field(default_factory=list)
+    obligations: List[Obligation] = Field(default_factory=list)
     terms: Optional[str] = None
-    value: Optional[float] = None
+    total_value: Optional[Decimal] = None
     currency: Optional[str] = "USD"
 
 
-class ReceiptExtraction(BaseModel):
-    """Schema for receipt extraction."""
-    receipt_number: Optional[str] = None
-    transaction_date: Optional[date] = None
-    vendor_name: Optional[str] = None
-    vendor_address: Optional[str] = None
-    items: List[dict] = Field(default_factory=list)
-    subtotal: Optional[float] = None
-    tax: Optional[float] = None
-    tip: Optional[float] = None
-    total: Optional[float] = None
-    payment_method: Optional[str] = None
-    currency: str = "USD"
+class FormField(BaseModel):
+    """Form field with label and value."""
+    label: str
+    value: str
+    field_type: str
+    page_number: int
 
 
 class FormExtraction(BaseModel):
     """Schema for form extraction."""
+    form_title: str
     form_type: Optional[str] = None
-    fields: dict = Field(default_factory=dict)
+    fields: List[FormField] = Field(default_factory=list)
+    signature_required: bool = False
+    signed_date: Optional[date] = None
     submitted_by: Optional[str] = None
     submission_date: Optional[date] = None
+
+
+class ReceiptItem(BaseModel):
+    """Item on a receipt."""
+    name: str
+    quantity: Optional[Decimal] = None
+    price: Decimal
+    total: Decimal
+
+
+class ReceiptExtraction(BaseModel):
+    """Schema for receipt extraction."""
+    vendor_name: str
+    vendor_address: Optional[str] = None
+    receipt_date: Optional[date] = None
+    receipt_time: Optional[str] = None
+    receipt_number: Optional[str] = None
+    items: List[ReceiptItem] = Field(default_factory=list)
+    subtotal: Optional[Decimal] = None
+    tax: Optional[Decimal] = None
+    tip: Decimal = Field(default=Decimal("0.00"))
+    total: Optional[Decimal] = None
+    payment_method: Optional[str] = None
+    transaction_id: Optional[str] = None
+    currency: str = "USD"
 
 
 class GenericExtraction(BaseModel):
