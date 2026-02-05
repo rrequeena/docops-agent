@@ -17,6 +17,14 @@ from src.agents.analyst.agent import (
     calculate_monthly_metrics,
     calculate_summary_statistics,
 )
+from src.agents.analyst.anomaly import (
+    Anomaly,
+    detect_price_spikes,
+    detect_duplicate_charges,
+    detect_tax_anomalies,
+    detect_unusual_patterns,
+    detect_all_anomalies,
+)
 
 __all__ = [
     "AnalystAgent",
@@ -34,4 +42,10 @@ __all__ = [
     "calculate_vendor_metrics",
     "calculate_monthly_metrics",
     "calculate_summary_statistics",
+    "Anomaly",
+    "detect_price_spikes",
+    "detect_duplicate_charges",
+    "detect_tax_anomalies",
+    "detect_unusual_patterns",
+    "detect_all_anomalies",
 ]
