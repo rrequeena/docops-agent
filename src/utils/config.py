@@ -18,6 +18,8 @@ class Settings(BaseSettings):
 
     # LangSmith
     langchain_tracing_v2: bool = False
+    langsmith_api_key: str = ""
+    langsmith_project: str = "docops-agent"
 
     # Database
     database_url: str = "postgresql://docops:docops123@localhost:5432/docops"
