@@ -1,0 +1,2682 @@
+[
+  {
+    "document_id": "doc_00001",
+    "vendor_name": "HardwareWorld",
+    "vendor_address": "7420 Business Ave, Suite 396",
+    "vendor_email": "billing@hardwareworld.com",
+    "vendor_phone": "+1-555-780-6814",
+    "vendor_tax_id": "XX-479926636",
+    "invoice_number": "INV-2026-HW-0001",
+    "invoice_date": "2026-01-25",
+    "due_date": "2026-02-24",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Training Session",
+        "quantity": 9,
+        "unit_price": 120.08,
+        "total": 1080.72
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 4,
+        "unit_price": 167.2,
+        "total": 668.79
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 2,
+        "unit_price": 274.28,
+        "total": 548.55
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 700.14,
+        "total": 700.14
+      }
+    ],
+    "subtotal": 2998.2,
+    "tax": 224.86,
+    "tax_rate": 0.075,
+    "total": 5872.95,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "price_spike",
+    "anomaly_details": {
+      "original_total": 3223.06,
+      "new_total": 5872.95,
+      "difference": 2649.89,
+      "spike_percent": 82.2164626613678
+    }
+  },
+  {
+    "document_id": "doc_00002",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "2762 Business Ave, Suite 459",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-649-7617",
+    "vendor_tax_id": "XX-938509214",
+    "invoice_number": "INV-2026-NP-0002",
+    "invoice_date": "2026-01-11",
+    "due_date": "2026-02-10",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Hardware Equipment",
+        "quantity": 2,
+        "unit_price": 711.08,
+        "total": 1422.16
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 2,
+        "unit_price": 279.2,
+        "total": 558.39
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 2,
+        "unit_price": 34.12,
+        "total": 68.24
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 7,
+        "unit_price": 14.68,
+        "total": 102.75
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 1,
+        "unit_price": 552.39,
+        "total": 552.39
+      }
+    ],
+    "subtotal": 2703.94,
+    "tax": 223.08,
+    "tax_rate": 0.0825,
+    "total": 2927.02,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "duplicate_charge",
+    "anomaly_details": {
+      "duplicate_of": "INV-2026-HW-0001",
+      "same_vendor": true,
+      "same_amount": true,
+      "same_date": true
+    }
+  },
+  {
+    "document_id": "doc_00003",
+    "vendor_name": "SoftwareHub",
+    "vendor_address": "1802 Business Ave, Suite 426",
+    "vendor_email": "billing@softwarehub.com",
+    "vendor_phone": "+1-555-335-2783",
+    "vendor_tax_id": "XX-116341462",
+    "invoice_number": "INV-2026-SH-0003",
+    "invoice_date": "2026-02-03",
+    "due_date": "2026-03-05",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Technical Support",
+        "quantity": 8,
+        "unit_price": 30.45,
+        "total": 243.59
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 1,
+        "unit_price": 332.68,
+        "total": 332.68
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 4,
+        "unit_price": 25.29,
+        "total": 101.15
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 10,
+        "unit_price": 7.95,
+        "total": 79.55
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": 159.01,
+        "total": 159.01
+      }
+    ],
+    "subtotal": 915.97,
+    "tax": 68.7,
+    "tax_rate": 0.075,
+    "total": 984.67,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00004",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "2930 Business Ave, Suite 216",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-541-9942",
+    "vendor_tax_id": "XX-190326288",
+    "invoice_number": "INV-2026-SIT-0004",
+    "invoice_date": "2026-02-17",
+    "due_date": "2026-03-19",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 1,
+        "unit_price": 667.25,
+        "total": 667.25
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 7,
+        "unit_price": 8.77,
+        "total": 61.36
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 7,
+        "unit_price": 30.57,
+        "total": 213.99
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 3,
+        "unit_price": 26.9,
+        "total": 80.71
+      },
+      {
+        "description": "Training Session",
+        "quantity": 5,
+        "unit_price": 19.49,
+        "total": 97.44
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 72.34,
+        "total": 72.34
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 1,
+        "unit_price": 69.2,
+        "total": 69.2
+      }
+    ],
+    "subtotal": 1262.28,
+    "tax": 94.67,
+    "tax_rate": 0.075,
+    "total": 2502.51,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "price_spike",
+    "anomaly_details": {
+      "original_total": 1356.95,
+      "new_total": 2502.51,
+      "difference": 1145.5600000000002,
+      "spike_percent": 84.421637422019
+    }
+  },
+  {
+    "document_id": "doc_00005",
+    "vendor_name": "CloudServices LLC",
+    "vendor_address": "5676 Business Ave, Suite 410",
+    "vendor_email": "billing@cloudservicesllc.com",
+    "vendor_phone": "+1-555-616-7399",
+    "vendor_tax_id": "XX-875917092",
+    "invoice_number": "INV-2026-CS-0005",
+    "invoice_date": "2026-03-05",
+    "due_date": "2026-04-04",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Technical Support",
+        "quantity": 8,
+        "unit_price": 46.96,
+        "total": 375.71
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 4,
+        "unit_price": 564.89,
+        "total": 2259.54
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 6,
+        "unit_price": 86.45,
+        "total": 518.71
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 8,
+        "unit_price": 75.43,
+        "total": 603.45
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 10,
+        "unit_price": 18.73,
+        "total": 187.26
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 4,
+        "unit_price": 57.88,
+        "total": 231.51
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 3,
+        "unit_price": 37.66,
+        "total": 112.97
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 76.61,
+        "total": 76.61
+      }
+    ],
+    "subtotal": 4365.77,
+    "tax": 360.18,
+    "tax_rate": 0.0825,
+    "total": 4725.95,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00006",
+    "vendor_name": "SoftwareHub",
+    "vendor_address": "5274 Business Ave, Suite 415",
+    "vendor_email": "billing@softwarehub.com",
+    "vendor_phone": "+1-555-992-3451",
+    "vendor_tax_id": "XX-734652905",
+    "invoice_number": "INV-2026-SH-0006",
+    "invoice_date": "2026-02-13",
+    "due_date": "2026-03-15",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Professional Services",
+        "quantity": 9,
+        "unit_price": 5.88,
+        "total": 52.89
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 6,
+        "unit_price": 5.89,
+        "total": 35.36
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 2,
+        "unit_price": 18.36,
+        "total": 36.71
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 6,
+        "unit_price": 2.59,
+        "total": 15.57
+      },
+      {
+        "description": "Training Session",
+        "quantity": 5,
+        "unit_price": 1.91,
+        "total": 9.54
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 21.27,
+        "total": 21.27
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": -10.63,
+        "total": -10.63
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": -60.72,
+        "total": -60.72
+      }
+    ],
+    "subtotal": 100,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 100.0,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00007",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "664 Business Ave, Suite 140",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-952-6725",
+    "vendor_tax_id": "XX-544987396",
+    "invoice_number": "INV-2026-SIT-0007",
+    "invoice_date": "2026-01-20",
+    "due_date": "2026-02-19",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Security Subscription",
+        "quantity": 3,
+        "unit_price": 124.77,
+        "total": 374.32
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 8,
+        "unit_price": 71.0,
+        "total": 568.0
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 1,
+        "unit_price": 121.6,
+        "total": 121.6
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 5,
+        "unit_price": 77.24,
+        "total": 386.21
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 6,
+        "unit_price": 13.53,
+        "total": 81.18
+      },
+      {
+        "description": "Software License",
+        "quantity": 7,
+        "unit_price": 9.99,
+        "total": 69.96
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 125.51,
+        "total": 125.51
+      }
+    ],
+    "subtotal": 1726.77,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 1726.77,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00008",
+    "vendor_name": "CloudServices LLC",
+    "vendor_address": "2353 Business Ave, Suite 160",
+    "vendor_email": "billing@cloudservicesllc.com",
+    "vendor_phone": "+1-555-731-9836",
+    "vendor_tax_id": "XX-666825690",
+    "invoice_number": "INV-2026-CS-0008",
+    "invoice_date": "2026-03-04",
+    "due_date": "2026-04-03",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Maintenance Fee",
+        "quantity": 3,
+        "unit_price": 289.03,
+        "total": 867.1
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 4,
+        "unit_price": 21.81,
+        "total": 87.24
+      },
+      {
+        "description": "Training Session",
+        "quantity": 8,
+        "unit_price": 30.02,
+        "total": 240.2
+      },
+      {
+        "description": "Training Session",
+        "quantity": 6,
+        "unit_price": 111.2,
+        "total": 667.21
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 1,
+        "unit_price": 595.12,
+        "total": 595.12
+      }
+    ],
+    "subtotal": 2456.86,
+    "tax": 202.69,
+    "tax_rate": 0.0825,
+    "total": 2659.55,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00009",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "6480 Business Ave, Suite 242",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-835-7224",
+    "vendor_tax_id": "XX-199546822",
+    "invoice_number": "INV-2026-NP-0009",
+    "invoice_date": "2026-02-13",
+    "due_date": "2026-03-15",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 3,
+        "unit_price": 237.6,
+        "total": 712.8
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 8,
+        "unit_price": 87.77,
+        "total": 702.13
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 7,
+        "unit_price": 109.32,
+        "total": 765.24
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 5,
+        "unit_price": 40.66,
+        "total": 203.31
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 342.54,
+        "total": 342.54
+      }
+    ],
+    "subtotal": 2726.02,
+    "tax": 189.82,
+    "tax_rate": 0.08,
+    "total": 2915.84,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "tax_anomaly",
+    "anomaly_details": {
+      "original_tax": 218.08,
+      "modified_tax": 189.82,
+      "difference": 28.26000000000002,
+      "description": "Tax amount does not match tax rate"
+    }
+  },
+  {
+    "document_id": "doc_00010",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "1752 Business Ave, Suite 500",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-730-3209",
+    "vendor_tax_id": "XX-102585091",
+    "invoice_number": "INV-2026-NP-0010",
+    "invoice_date": "2026-01-09",
+    "due_date": "2026-02-08",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 1400.28,
+        "total": 1400.28
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 1064.1,
+        "total": 1064.1
+      }
+    ],
+    "subtotal": 2464.37,
+    "tax": 184.83,
+    "tax_rate": 0.075,
+    "total": 2649.2,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00011",
+    "vendor_name": "DataCorp",
+    "vendor_address": "9860 Business Ave, Suite 395",
+    "vendor_email": "billing@datacorp.com",
+    "vendor_phone": "+1-555-780-5725",
+    "vendor_tax_id": "XX-365879680",
+    "invoice_number": "INV-2026-DC-0011",
+    "invoice_date": "2026-02-28",
+    "due_date": "2026-03-30",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 4,
+        "unit_price": 54.73,
+        "total": 218.94
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 5,
+        "unit_price": 66.09,
+        "total": 330.44
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 10,
+        "unit_price": 55.17,
+        "total": 551.72
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 444.77,
+        "total": 444.77
+      }
+    ],
+    "subtotal": 1545.87,
+    "tax": 115.94,
+    "tax_rate": 0.075,
+    "total": 1661.81,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00012",
+    "vendor_name": "SoftwareHub",
+    "vendor_address": "6668 Business Ave, Suite 297",
+    "vendor_email": "billing@softwarehub.com",
+    "vendor_phone": "+1-555-579-4606",
+    "vendor_tax_id": "XX-579588916",
+    "invoice_number": "INV-2026-SH-0012",
+    "invoice_date": "2026-01-13",
+    "due_date": "2026-02-12",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 6,
+        "unit_price": 51.22,
+        "total": 307.32
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 3,
+        "unit_price": 29.34,
+        "total": 88.03
+      },
+      {
+        "description": "Software License",
+        "quantity": 5,
+        "unit_price": 32.17,
+        "total": 160.85
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 5,
+        "unit_price": 45.64,
+        "total": 228.19
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 10,
+        "unit_price": 10.07,
+        "total": 100.68
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 2,
+        "unit_price": 24.49,
+        "total": 48.98
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 10,
+        "unit_price": 4.15,
+        "total": 41.48
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": -9.15,
+        "total": -9.15
+      }
+    ],
+    "subtotal": 966.39,
+    "tax": 72.48,
+    "tax_rate": 0.075,
+    "total": 1038.87,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00013",
+    "vendor_name": "TechSupply Inc",
+    "vendor_address": "4879 Business Ave, Suite 317",
+    "vendor_email": "billing@techsupplyinc.com",
+    "vendor_phone": "+1-555-554-7295",
+    "vendor_tax_id": "XX-514060374",
+    "invoice_number": "INV-2026-TS-0013",
+    "invoice_date": "2026-01-24",
+    "due_date": "2026-02-23",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 9,
+        "unit_price": 129.67,
+        "total": 1167.02
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 2,
+        "unit_price": 272.48,
+        "total": 544.96
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 1,
+        "unit_price": 159.99,
+        "total": 159.99
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 3,
+        "unit_price": 35.22,
+        "total": 105.66
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 356.92,
+        "total": 356.92
+      }
+    ],
+    "subtotal": 2334.53,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 2334.53,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00014",
+    "vendor_name": "DataCorp",
+    "vendor_address": "141 Business Ave, Suite 384",
+    "vendor_email": "billing@datacorp.com",
+    "vendor_phone": "+1-555-374-4413",
+    "vendor_tax_id": "XX-178983371",
+    "invoice_number": "INV-2026-DC-0014",
+    "invoice_date": "2026-02-10",
+    "due_date": "2026-03-12",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 8,
+        "unit_price": 74.02,
+        "total": 592.19
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 4,
+        "unit_price": 208.5,
+        "total": 834.02
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 6,
+        "unit_price": 74.54,
+        "total": 447.24
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 5,
+        "unit_price": 35.63,
+        "total": 178.15
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 2,
+        "unit_price": 61.64,
+        "total": 123.28
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 10,
+        "unit_price": 5.03,
+        "total": 50.33
+      },
+      {
+        "description": "Software License",
+        "quantity": 1,
+        "unit_price": 33.6,
+        "total": 33.6
+      }
+    ],
+    "subtotal": 2258.8,
+    "tax": 186.35,
+    "tax_rate": 0.0825,
+    "total": 2445.15,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00015",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "2468 Business Ave, Suite 310",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-799-1494",
+    "vendor_tax_id": "XX-725999689",
+    "invoice_number": "INV-2026-SIT-0015",
+    "invoice_date": "2026-01-18",
+    "due_date": "2026-02-17",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 4,
+        "unit_price": 122.08,
+        "total": 488.32
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 7,
+        "unit_price": 48.23,
+        "total": 337.61
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 10,
+        "unit_price": 18.18,
+        "total": 181.78
+      },
+      {
+        "description": "Training Session",
+        "quantity": 4,
+        "unit_price": 113.6,
+        "total": 454.4
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 3,
+        "unit_price": 31.27,
+        "total": 93.81
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 1,
+        "unit_price": 310.38,
+        "total": 310.38
+      }
+    ],
+    "subtotal": 1866.31,
+    "tax": 149.3,
+    "tax_rate": 0.08,
+    "total": 2015.61,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00016",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "3598 Business Ave, Suite 254",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-134-4682",
+    "vendor_tax_id": "XX-371284353",
+    "invoice_number": "INV-2026-NP-0016",
+    "invoice_date": "2026-01-31",
+    "due_date": "2026-03-02",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 1324.3,
+        "total": 1324.3
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 1011.26,
+        "total": 1011.26
+      }
+    ],
+    "subtotal": 2335.56,
+    "tax": 204.36,
+    "tax_rate": 0.0875,
+    "total": 2539.92,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00017",
+    "vendor_name": "Office Depot",
+    "vendor_address": "6252 Business Ave, Suite 343",
+    "vendor_email": "billing@officedepot.com",
+    "vendor_phone": "+1-555-224-2044",
+    "vendor_tax_id": "XX-821655297",
+    "invoice_number": "INV-2026-O-0017",
+    "invoice_date": "2026-02-15",
+    "due_date": "2026-03-17",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 9,
+        "unit_price": 14.97,
+        "total": 134.75
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 3,
+        "unit_price": 37.68,
+        "total": 113.04
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 4,
+        "unit_price": 24.2,
+        "total": 96.79
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 70.04,
+        "total": 70.04
+      }
+    ],
+    "subtotal": 414.62,
+    "tax": 33.17,
+    "tax_rate": 0.08,
+    "total": 447.79,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00018",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "9178 Business Ave, Suite 205",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-277-9179",
+    "vendor_tax_id": "XX-936834121",
+    "invoice_number": "INV-2026-NP-0018",
+    "invoice_date": "2026-01-08",
+    "due_date": "2026-02-07",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 5,
+        "unit_price": 358.01,
+        "total": 1790.03
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 8,
+        "unit_price": 108.32,
+        "total": 866.58
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 8,
+        "unit_price": 21.64,
+        "total": 173.12
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 766.37,
+        "total": 766.37
+      }
+    ],
+    "subtotal": 3596.1,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 3596.1,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00019",
+    "vendor_name": "TechSupply Inc",
+    "vendor_address": "5167 Business Ave, Suite 218",
+    "vendor_email": "billing@techsupplyinc.com",
+    "vendor_phone": "+1-555-430-9962",
+    "vendor_tax_id": "XX-602878737",
+    "invoice_number": "INV-2026-TS-0019",
+    "invoice_date": "2026-02-08",
+    "due_date": "2026-03-10",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Hardware Equipment",
+        "quantity": 6,
+        "unit_price": 148.63,
+        "total": 891.76
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 2,
+        "unit_price": 413.25,
+        "total": 826.51
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 8,
+        "unit_price": 30.03,
+        "total": 240.22
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 8,
+        "unit_price": 14.46,
+        "total": 115.68
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 4,
+        "unit_price": 47.26,
+        "total": 189.03
+      },
+      {
+        "description": "Software License",
+        "quantity": 1,
+        "unit_price": 507.94,
+        "total": 507.94
+      }
+    ],
+    "subtotal": 2771.14,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 2771.14,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00020",
+    "vendor_name": "Office Depot",
+    "vendor_address": "6452 Business Ave, Suite 155",
+    "vendor_email": "billing@officedepot.com",
+    "vendor_phone": "+1-555-848-5500",
+    "vendor_tax_id": "XX-463995282",
+    "invoice_number": "INV-2026-O-0020",
+    "invoice_date": "2026-01-24",
+    "due_date": "2026-02-23",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 8,
+        "unit_price": 46.22,
+        "total": 369.75
+      },
+      {
+        "description": "Software License",
+        "quantity": 5,
+        "unit_price": 26.22,
+        "total": 131.1
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 5,
+        "unit_price": 25.94,
+        "total": 129.72
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 4,
+        "unit_price": 14.93,
+        "total": 59.73
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 7,
+        "unit_price": 6.83,
+        "total": 47.83
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 5,
+        "unit_price": 3.42,
+        "total": 17.11
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": -15.4,
+        "total": -15.4
+      }
+    ],
+    "subtotal": 739.84,
+    "tax": 61.04,
+    "tax_rate": 0.0825,
+    "total": 800.88,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00021",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "1719 Business Ave, Suite 326",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-371-4104",
+    "vendor_tax_id": "XX-242716917",
+    "invoice_number": "INV-2026-NP-0021",
+    "invoice_date": "2026-02-26",
+    "due_date": "2026-03-28",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Domain Registration",
+        "quantity": 2,
+        "unit_price": 101.28,
+        "total": 202.56
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 2920.74,
+        "total": 2920.74
+      }
+    ],
+    "subtotal": 3123.3,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 3123.3,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00022",
+    "vendor_name": "TechSupply Inc",
+    "vendor_address": "5134 Business Ave, Suite 238",
+    "vendor_email": "billing@techsupplyinc.com",
+    "vendor_phone": "+1-555-935-8836",
+    "vendor_tax_id": "XX-944830812",
+    "invoice_number": "INV-2026-TS-0022",
+    "invoice_date": "2026-03-07",
+    "due_date": "2026-04-06",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 7,
+        "unit_price": 216.63,
+        "total": 1516.44
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 9,
+        "unit_price": 58.43,
+        "total": 525.86
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 3,
+        "unit_price": 220.21,
+        "total": 660.62
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 4,
+        "unit_price": 77.58,
+        "total": 310.31
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 10,
+        "unit_price": 49.63,
+        "total": 496.31
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": 457.73,
+        "total": 457.73
+      }
+    ],
+    "subtotal": 3967.29,
+    "tax": 297.55,
+    "tax_rate": 0.075,
+    "total": 4264.84,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00023",
+    "vendor_name": "DataCorp",
+    "vendor_address": "6015 Business Ave, Suite 461",
+    "vendor_email": "billing@datacorp.com",
+    "vendor_phone": "+1-555-892-5359",
+    "vendor_tax_id": "XX-690288514",
+    "invoice_number": "INV-2026-DC-0023",
+    "invoice_date": "2026-01-30",
+    "due_date": "2026-03-01",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 10,
+        "unit_price": 50.74,
+        "total": 507.36
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": 212.96,
+        "total": 212.96
+      },
+      {
+        "description": "Software License",
+        "quantity": 3,
+        "unit_price": 20.61,
+        "total": 61.82
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 4,
+        "unit_price": 54.87,
+        "total": 219.5
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 5,
+        "unit_price": 11.21,
+        "total": 56.06
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 8,
+        "unit_price": 7.66,
+        "total": 61.24
+      },
+      {
+        "description": "Software License",
+        "quantity": 10,
+        "unit_price": 4.51,
+        "total": 45.09
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 3.8,
+        "total": 3.8
+      }
+    ],
+    "subtotal": 1167.83,
+    "tax": 93.43,
+    "tax_rate": 0.08,
+    "total": 2417.08,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "price_spike",
+    "anomaly_details": {
+      "original_total": 1261.26,
+      "new_total": 2417.08,
+      "difference": 1155.82,
+      "spike_percent": 91.64041400504152
+    }
+  },
+  {
+    "document_id": "doc_00024",
+    "vendor_name": "TechSupply Inc",
+    "vendor_address": "8255 Business Ave, Suite 260",
+    "vendor_email": "billing@techsupplyinc.com",
+    "vendor_phone": "+1-555-602-3819",
+    "vendor_tax_id": "XX-470437386",
+    "invoice_number": "INV-2026-TS-0024",
+    "invoice_date": "2026-01-09",
+    "due_date": "2026-02-08",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Training Session",
+        "quantity": 6,
+        "unit_price": 269.52,
+        "total": 1617.11
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 252.77,
+        "total": 252.77
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 2,
+        "unit_price": 228.45,
+        "total": 456.9
+      },
+      {
+        "description": "Software License",
+        "quantity": 1,
+        "unit_price": 1452.81,
+        "total": 1452.81
+      }
+    ],
+    "subtotal": 3779.6,
+    "tax": 236.22,
+    "tax_rate": 0.0625,
+    "total": 4015.82,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00025",
+    "vendor_name": "DataCorp",
+    "vendor_address": "1584 Business Ave, Suite 204",
+    "vendor_email": "billing@datacorp.com",
+    "vendor_phone": "+1-555-286-3190",
+    "vendor_tax_id": "XX-809868517",
+    "invoice_number": "INV-2026-DC-0025",
+    "invoice_date": "2026-02-11",
+    "due_date": "2026-03-13",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Security Subscription",
+        "quantity": 3,
+        "unit_price": 187.83,
+        "total": 563.48
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 4,
+        "unit_price": 137.43,
+        "total": 549.71
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 2,
+        "unit_price": 87.63,
+        "total": 175.27
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 7,
+        "unit_price": 16.66,
+        "total": 116.6
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 8,
+        "unit_price": 27.42,
+        "total": 219.35
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 8,
+        "unit_price": 14.61,
+        "total": 116.91
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 4,
+        "unit_price": 13.05,
+        "total": 52.19
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 448.47,
+        "total": 448.47
+      }
+    ],
+    "subtotal": 2241.99,
+    "tax": 168.15,
+    "tax_rate": 0.075,
+    "total": 2410.14,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00026",
+    "vendor_name": "Acme Corp",
+    "vendor_address": "8076 Business Ave, Suite 141",
+    "vendor_email": "billing@acmecorp.com",
+    "vendor_phone": "+1-555-218-6011",
+    "vendor_tax_id": "XX-581740877",
+    "invoice_number": "INV-2026-A-0026",
+    "invoice_date": "2026-02-15",
+    "due_date": "2026-03-17",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 4,
+        "unit_price": 233.91,
+        "total": 935.64
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 10,
+        "unit_price": 8.99,
+        "total": 89.92
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 164.68,
+        "total": 164.68
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 6,
+        "unit_price": 55.53,
+        "total": 333.16
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 5,
+        "unit_price": 36.75,
+        "total": 183.74
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 8,
+        "unit_price": 18.33,
+        "total": 146.64
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 10,
+        "unit_price": 5.53,
+        "total": 55.31
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 46.44,
+        "total": 46.44
+      }
+    ],
+    "subtotal": 1955.53,
+    "tax": 146.66,
+    "tax_rate": 0.075,
+    "total": 2102.19,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00027",
+    "vendor_name": "ConsultingGroup",
+    "vendor_address": "2112 Business Ave, Suite 277",
+    "vendor_email": "billing@consultinggroup.com",
+    "vendor_phone": "+1-555-291-3713",
+    "vendor_tax_id": "XX-530784169",
+    "invoice_number": "INV-2026-CG-0027",
+    "invoice_date": "2026-01-10",
+    "due_date": "2026-02-09",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Domain Registration",
+        "quantity": 3,
+        "unit_price": 201.56,
+        "total": 604.68
+      },
+      {
+        "description": "Software License",
+        "quantity": 7,
+        "unit_price": 255.04,
+        "total": 1785.3
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 1081.26,
+        "total": 1081.26
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 1,
+        "unit_price": 1506.92,
+        "total": 1506.92
+      }
+    ],
+    "subtotal": 4978.16,
+    "tax": 311.13,
+    "tax_rate": 0.0625,
+    "total": 5289.29,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00028",
+    "vendor_name": "TechSupply Inc",
+    "vendor_address": "7193 Business Ave, Suite 341",
+    "vendor_email": "billing@techsupplyinc.com",
+    "vendor_phone": "+1-555-961-6483",
+    "vendor_tax_id": "XX-658159422",
+    "invoice_number": "INV-2026-TS-0028",
+    "invoice_date": "2026-03-02",
+    "due_date": "2026-04-01",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Hardware Equipment",
+        "quantity": 10,
+        "unit_price": 25.93,
+        "total": 259.3
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 2,
+        "unit_price": 900.03,
+        "total": 1800.06
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 619.08,
+        "total": 619.08
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 8,
+        "unit_price": 46.34,
+        "total": 370.69
+      },
+      {
+        "description": "Training Session",
+        "quantity": 2,
+        "unit_price": 155.11,
+        "total": 310.23
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 243.54,
+        "total": 243.54
+      }
+    ],
+    "subtotal": 3602.89,
+    "tax": 315.25,
+    "tax_rate": 0.0875,
+    "total": 3918.14,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00029",
+    "vendor_name": "CloudServices LLC",
+    "vendor_address": "4171 Business Ave, Suite 115",
+    "vendor_email": "billing@cloudservicesllc.com",
+    "vendor_phone": "+1-555-515-9708",
+    "vendor_tax_id": "XX-784892929",
+    "invoice_number": "INV-2026-CS-0029",
+    "invoice_date": "2026-01-29",
+    "due_date": "2026-02-28",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Hardware Equipment",
+        "quantity": 5,
+        "unit_price": 441.1,
+        "total": 2205.5
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 7,
+        "unit_price": 31.89,
+        "total": 223.23
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 7,
+        "unit_price": 25.37,
+        "total": 177.59
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 9,
+        "unit_price": 131.41,
+        "total": 1182.65
+      },
+      {
+        "description": "Software License",
+        "quantity": 6,
+        "unit_price": 70.72,
+        "total": 424.32
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 493.83,
+        "total": 493.83
+      }
+    ],
+    "subtotal": 4707.12,
+    "tax": 353.03,
+    "tax_rate": 0.075,
+    "total": 8815.0,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "price_spike",
+    "anomaly_details": {
+      "original_total": 5060.15,
+      "new_total": 8815.0,
+      "difference": 3754.8500000000004,
+      "spike_percent": 74.2043431629175
+    }
+  },
+  {
+    "document_id": "doc_00030",
+    "vendor_name": "Office Depot",
+    "vendor_address": "9811 Business Ave, Suite 462",
+    "vendor_email": "billing@officedepot.com",
+    "vendor_phone": "+1-555-966-8298",
+    "vendor_tax_id": "XX-592405435",
+    "invoice_number": "INV-2026-O-0030",
+    "invoice_date": "2026-02-04",
+    "due_date": "2026-03-06",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 2,
+        "unit_price": 143.68,
+        "total": 287.36
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 10,
+        "unit_price": 6.99,
+        "total": 69.94
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 188.53,
+        "total": 188.53
+      }
+    ],
+    "subtotal": 545.83,
+    "tax": 34.11,
+    "tax_rate": 0.0625,
+    "total": 579.94,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "duplicate_charge",
+    "anomaly_details": {
+      "duplicate_of": "INV-2026-CS-0029",
+      "same_vendor": true,
+      "same_amount": true,
+      "same_date": true
+    }
+  },
+  {
+    "document_id": "doc_00031",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "5468 Business Ave, Suite 170",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-679-3259",
+    "vendor_tax_id": "XX-723121624",
+    "invoice_number": "INV-2026-SIT-0031",
+    "invoice_date": "2026-01-27",
+    "due_date": "2026-02-26",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 483.27,
+        "total": 483.27
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 1,
+        "unit_price": 771.52,
+        "total": 771.52
+      }
+    ],
+    "subtotal": 1254.79,
+    "tax": 103.52,
+    "tax_rate": 0.0825,
+    "total": 1358.31,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00032",
+    "vendor_name": "Acme Corp",
+    "vendor_address": "5554 Business Ave, Suite 439",
+    "vendor_email": "billing@acmecorp.com",
+    "vendor_phone": "+1-555-799-9854",
+    "vendor_tax_id": "XX-445034558",
+    "invoice_number": "INV-2026-A-0032",
+    "invoice_date": "2026-01-31",
+    "due_date": "2026-03-02",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Training Session",
+        "quantity": 4,
+        "unit_price": 66.53,
+        "total": 266.12
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 2,
+        "unit_price": 278.78,
+        "total": 557.56
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 1132.22,
+        "total": 1132.22
+      }
+    ],
+    "subtotal": 1955.91,
+    "tax": 92.25,
+    "tax_rate": 0.0625,
+    "total": 2048.16,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "tax_anomaly",
+    "anomaly_details": {
+      "original_tax": 122.24,
+      "modified_tax": 92.25,
+      "difference": 29.989999999999995,
+      "description": "Tax amount does not match tax rate"
+    }
+  },
+  {
+    "document_id": "doc_00033",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "3472 Business Ave, Suite 148",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-397-3866",
+    "vendor_tax_id": "XX-844834127",
+    "invoice_number": "INV-2026-SIT-0033",
+    "invoice_date": "2026-01-22",
+    "due_date": "2026-02-21",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 3,
+        "unit_price": 17.11,
+        "total": 51.34
+      },
+      {
+        "description": "Software License",
+        "quantity": 5,
+        "unit_price": 70.92,
+        "total": 354.59
+      },
+      {
+        "description": "Training Session",
+        "quantity": 9,
+        "unit_price": 25.06,
+        "total": 225.51
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 4,
+        "unit_price": 148.84,
+        "total": 595.37
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 290.84,
+        "total": 290.84
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 2,
+        "unit_price": 37.94,
+        "total": 75.87
+      },
+      {
+        "description": "Software License",
+        "quantity": 7,
+        "unit_price": 7.45,
+        "total": 52.17
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 75.68,
+        "total": 75.68
+      }
+    ],
+    "subtotal": 1721.36,
+    "tax": 142.01,
+    "tax_rate": 0.0825,
+    "total": 3514.04,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "price_spike",
+    "anomaly_details": {
+      "original_total": 1863.37,
+      "new_total": 3514.04,
+      "difference": 1650.67,
+      "spike_percent": 88.58525226688658
+    }
+  },
+  {
+    "document_id": "doc_00034",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "9380 Business Ave, Suite 425",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-710-3510",
+    "vendor_tax_id": "XX-319192495",
+    "invoice_number": "INV-2026-SIT-0034",
+    "invoice_date": "2026-02-18",
+    "due_date": "2026-03-20",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 10,
+        "unit_price": 8.09,
+        "total": 80.9
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 5,
+        "unit_price": 93.62,
+        "total": 468.09
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 1613.68,
+        "total": 1613.68
+      }
+    ],
+    "subtotal": 2162.68,
+    "tax": 162.2,
+    "tax_rate": 0.075,
+    "total": 2324.88,
+    "currency": "USD",
+    "payment_terms": "Net 30",
+    "anomaly_type": "duplicate_charge",
+    "anomaly_details": {
+      "duplicate_of": "INV-2026-SIT-0033",
+      "same_vendor": true,
+      "same_amount": true,
+      "same_date": true
+    }
+  },
+  {
+    "document_id": "doc_00035",
+    "vendor_name": "Acme Corp",
+    "vendor_address": "8318 Business Ave, Suite 261",
+    "vendor_email": "billing@acmecorp.com",
+    "vendor_phone": "+1-555-261-8378",
+    "vendor_tax_id": "XX-450491720",
+    "invoice_number": "INV-2026-A-0035",
+    "invoice_date": "2026-02-16",
+    "due_date": "2026-03-18",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Domain Registration",
+        "quantity": 6,
+        "unit_price": 31.8,
+        "total": 190.79
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 5,
+        "unit_price": 135.18,
+        "total": 675.88
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 6,
+        "unit_price": 35.46,
+        "total": 212.74
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 7,
+        "unit_price": 26.0,
+        "total": 182.0
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 3,
+        "unit_price": 37.45,
+        "total": 112.36
+      },
+      {
+        "description": "Training Session",
+        "quantity": 6,
+        "unit_price": 18.69,
+        "total": 112.13
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 7,
+        "unit_price": 12.0,
+        "total": 83.98
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 58.22,
+        "total": 58.22
+      }
+    ],
+    "subtotal": 1628.11,
+    "tax": 101.76,
+    "tax_rate": 0.0625,
+    "total": 1729.87,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00036",
+    "vendor_name": "CloudServices LLC",
+    "vendor_address": "8472 Business Ave, Suite 495",
+    "vendor_email": "billing@cloudservicesllc.com",
+    "vendor_phone": "+1-555-790-5568",
+    "vendor_tax_id": "XX-680354982",
+    "invoice_number": "INV-2026-CS-0036",
+    "invoice_date": "2026-02-08",
+    "due_date": "2026-03-10",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Professional Services",
+        "quantity": 4,
+        "unit_price": 437.33,
+        "total": 1749.33
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": 354.21,
+        "total": 354.21
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 1506.2,
+        "total": 1506.2
+      }
+    ],
+    "subtotal": 3609.75,
+    "tax": 225.61,
+    "tax_rate": 0.0625,
+    "total": 3835.36,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00037",
+    "vendor_name": "HardwareWorld",
+    "vendor_address": "2678 Business Ave, Suite 495",
+    "vendor_email": "billing@hardwareworld.com",
+    "vendor_phone": "+1-555-455-2684",
+    "vendor_tax_id": "XX-334464354",
+    "invoice_number": "INV-2026-HW-0037",
+    "invoice_date": "2026-02-10",
+    "due_date": "2026-03-12",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 3184.82,
+        "total": 3184.82
+      },
+      {
+        "description": "Training Session",
+        "quantity": 9,
+        "unit_price": 56.65,
+        "total": 509.82
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 5,
+        "unit_price": 33.28,
+        "total": 166.4
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": 1725.62,
+        "total": 1725.62
+      }
+    ],
+    "subtotal": 5586.65,
+    "tax": 349.17,
+    "tax_rate": 0.0625,
+    "total": 5935.82,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00038",
+    "vendor_name": "Acme Corp",
+    "vendor_address": "9748 Business Ave, Suite 239",
+    "vendor_email": "billing@acmecorp.com",
+    "vendor_phone": "+1-555-430-8065",
+    "vendor_tax_id": "XX-702699511",
+    "invoice_number": "INV-2026-A-0038",
+    "invoice_date": "2026-01-31",
+    "due_date": "2026-03-02",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Training Session",
+        "quantity": 7,
+        "unit_price": 95.98,
+        "total": 671.83
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 494.68,
+        "total": 494.68
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 10,
+        "unit_price": 5.32,
+        "total": 53.17
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 9,
+        "unit_price": 10.73,
+        "total": 96.54
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 4,
+        "unit_price": 14.3,
+        "total": 57.18
+      },
+      {
+        "description": "Training Session",
+        "quantity": 3,
+        "unit_price": 32.1,
+        "total": 96.3
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 8,
+        "unit_price": 18.81,
+        "total": 150.45
+      },
+      {
+        "description": "Training Session",
+        "quantity": 1,
+        "unit_price": 234.44,
+        "total": 234.44
+      }
+    ],
+    "subtotal": 1854.58,
+    "tax": 153.0,
+    "tax_rate": 0.0825,
+    "total": 2007.58,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00039",
+    "vendor_name": "Office Depot",
+    "vendor_address": "1831 Business Ave, Suite 263",
+    "vendor_email": "billing@officedepot.com",
+    "vendor_phone": "+1-555-891-1127",
+    "vendor_tax_id": "XX-941977162",
+    "invoice_number": "INV-2026-O-0039",
+    "invoice_date": "2026-02-12",
+    "due_date": "2026-03-14",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Security Subscription",
+        "quantity": 4,
+        "unit_price": 45.7,
+        "total": 182.8
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 1,
+        "unit_price": 143.71,
+        "total": 143.71
+      }
+    ],
+    "subtotal": 326.51,
+    "tax": 28.57,
+    "tax_rate": 0.0875,
+    "total": 355.08,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00040",
+    "vendor_name": "Office Depot",
+    "vendor_address": "7224 Business Ave, Suite 356",
+    "vendor_email": "billing@officedepot.com",
+    "vendor_phone": "+1-555-821-1034",
+    "vendor_tax_id": "XX-532698504",
+    "invoice_number": "INV-2026-O-0040",
+    "invoice_date": "2026-02-25",
+    "due_date": "2026-03-27",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 5,
+        "unit_price": 15.16,
+        "total": 75.79
+      },
+      {
+        "description": "Software License",
+        "quantity": 4,
+        "unit_price": 58.86,
+        "total": 235.44
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 10,
+        "unit_price": 13.36,
+        "total": 133.56
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 8,
+        "unit_price": 14.66,
+        "total": 117.3
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 6,
+        "unit_price": 10.44,
+        "total": 62.64
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 7,
+        "unit_price": 5.08,
+        "total": 35.59
+      },
+      {
+        "description": "Training Session",
+        "quantity": 8,
+        "unit_price": 0.85,
+        "total": 6.84
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 1,
+        "unit_price": 3.22,
+        "total": 3.22
+      }
+    ],
+    "subtotal": 670.4,
+    "tax": 50.28,
+    "tax_rate": 0.075,
+    "total": 720.68,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00041",
+    "vendor_name": "Office Depot",
+    "vendor_address": "6540 Business Ave, Suite 277",
+    "vendor_email": "billing@officedepot.com",
+    "vendor_phone": "+1-555-326-1086",
+    "vendor_tax_id": "XX-602134510",
+    "invoice_number": "INV-2026-O-0041",
+    "invoice_date": "2026-02-17",
+    "due_date": "2026-03-19",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 8,
+        "unit_price": 34.24,
+        "total": 273.88
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 8,
+        "unit_price": 18.28,
+        "total": 146.24
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 3,
+        "unit_price": 29.63,
+        "total": 88.9
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 147.84,
+        "total": 147.84
+      }
+    ],
+    "subtotal": 656.86,
+    "tax": 57.48,
+    "tax_rate": 0.0875,
+    "total": 714.34,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00042",
+    "vendor_name": "CloudServices LLC",
+    "vendor_address": "2495 Business Ave, Suite 391",
+    "vendor_email": "billing@cloudservicesllc.com",
+    "vendor_phone": "+1-555-924-8689",
+    "vendor_tax_id": "XX-512462274",
+    "invoice_number": "INV-2026-CS-0042",
+    "invoice_date": "2026-02-21",
+    "due_date": "2026-03-23",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Maintenance Fee",
+        "quantity": 2,
+        "unit_price": 997.81,
+        "total": 1995.62
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 8,
+        "unit_price": 110.37,
+        "total": 882.94
+      },
+      {
+        "description": "Training Session",
+        "quantity": 8,
+        "unit_price": 48.1,
+        "total": 384.83
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 8,
+        "unit_price": 34.47,
+        "total": 275.77
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 4,
+        "unit_price": 12.93,
+        "total": 51.74
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 4,
+        "unit_price": 17.45,
+        "total": 69.8
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 104.78,
+        "total": 104.78
+      }
+    ],
+    "subtotal": 3765.46,
+    "tax": 235.34,
+    "tax_rate": 0.0625,
+    "total": 4000.8,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00043",
+    "vendor_name": "SoftwareHub",
+    "vendor_address": "7634 Business Ave, Suite 342",
+    "vendor_email": "billing@softwarehub.com",
+    "vendor_phone": "+1-555-962-5562",
+    "vendor_tax_id": "XX-982455022",
+    "invoice_number": "INV-2026-SH-0043",
+    "invoice_date": "2026-02-15",
+    "due_date": "2026-03-17",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 5,
+        "unit_price": 12.75,
+        "total": 63.74
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 5,
+        "unit_price": 36.17,
+        "total": 180.85
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 7,
+        "unit_price": 8.47,
+        "total": 59.27
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 5,
+        "unit_price": 18.12,
+        "total": 90.59
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 1,
+        "unit_price": 48.3,
+        "total": 48.3
+      },
+      {
+        "description": "Training Session",
+        "quantity": 10,
+        "unit_price": 4.74,
+        "total": 47.39
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": -17.56,
+        "total": -17.56
+      }
+    ],
+    "subtotal": 472.58,
+    "tax": 37.81,
+    "tax_rate": 0.08,
+    "total": 510.39,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00044",
+    "vendor_name": "NetworkPro",
+    "vendor_address": "1212 Business Ave, Suite 366",
+    "vendor_email": "billing@networkpro.com",
+    "vendor_phone": "+1-555-820-6273",
+    "vendor_tax_id": "XX-888228953",
+    "invoice_number": "INV-2026-NP-0044",
+    "invoice_date": "2026-02-10",
+    "due_date": "2026-03-12",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 4,
+        "unit_price": 244.63,
+        "total": 978.5
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 1278.02,
+        "total": 1278.02
+      }
+    ],
+    "subtotal": 2256.52,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 2256.52,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00045",
+    "vendor_name": "TechSupply Inc",
+    "vendor_address": "6342 Business Ave, Suite 258",
+    "vendor_email": "billing@techsupplyinc.com",
+    "vendor_phone": "+1-555-619-2353",
+    "vendor_tax_id": "XX-887876525",
+    "invoice_number": "INV-2026-TS-0045",
+    "invoice_date": "2026-02-03",
+    "due_date": "2026-03-05",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Training Session",
+        "quantity": 3,
+        "unit_price": 240.89,
+        "total": 722.66
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 4,
+        "unit_price": 39.62,
+        "total": 158.48
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 9,
+        "unit_price": 29.97,
+        "total": 269.71
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 2,
+        "unit_price": 53.11,
+        "total": 106.21
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 1,
+        "unit_price": 206.93,
+        "total": 206.93
+      }
+    ],
+    "subtotal": 1463.99,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 1463.99,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00046",
+    "vendor_name": "HardwareWorld",
+    "vendor_address": "4792 Business Ave, Suite 193",
+    "vendor_email": "billing@hardwareworld.com",
+    "vendor_phone": "+1-555-283-7336",
+    "vendor_tax_id": "XX-130198426",
+    "invoice_number": "INV-2026-HW-0046",
+    "invoice_date": "2026-03-13",
+    "due_date": "2026-04-12",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Professional Services",
+        "quantity": 6,
+        "unit_price": 14.71,
+        "total": 88.25
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 1,
+        "unit_price": 3642.56,
+        "total": 3642.56
+      }
+    ],
+    "subtotal": 3730.81,
+    "tax": 307.79,
+    "tax_rate": 0.0825,
+    "total": 4038.6,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00047",
+    "vendor_name": "CloudServices LLC",
+    "vendor_address": "2703 Business Ave, Suite 424",
+    "vendor_email": "billing@cloudservicesllc.com",
+    "vendor_phone": "+1-555-427-7188",
+    "vendor_tax_id": "XX-188592120",
+    "invoice_number": "INV-2026-CS-0047",
+    "invoice_date": "2026-01-31",
+    "due_date": "2026-03-02",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Software License",
+        "quantity": 5,
+        "unit_price": 42.35,
+        "total": 211.76
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 4,
+        "unit_price": 243.9,
+        "total": 975.6
+      },
+      {
+        "description": "Training Session",
+        "quantity": 9,
+        "unit_price": 9.5,
+        "total": 85.54
+      },
+      {
+        "description": "Security Subscription",
+        "quantity": 2,
+        "unit_price": 119.7,
+        "total": 239.4
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 1,
+        "unit_price": 1267.62,
+        "total": 1267.62
+      }
+    ],
+    "subtotal": 2779.92,
+    "tax": 208.49,
+    "tax_rate": 0.075,
+    "total": 2988.41,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00048",
+    "vendor_name": "DataCorp",
+    "vendor_address": "6312 Business Ave, Suite 427",
+    "vendor_email": "billing@datacorp.com",
+    "vendor_phone": "+1-555-753-9465",
+    "vendor_tax_id": "XX-663937242",
+    "invoice_number": "INV-2026-DC-0048",
+    "invoice_date": "2026-02-01",
+    "due_date": "2026-03-03",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Professional Services",
+        "quantity": 5,
+        "unit_price": 78.31,
+        "total": 391.54
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 1,
+        "unit_price": 2156.04,
+        "total": 2156.04
+      }
+    ],
+    "subtotal": 2547.59,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 2547.59,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00049",
+    "vendor_name": "SecureIT Solutions",
+    "vendor_address": "5413 Business Ave, Suite 366",
+    "vendor_email": "billing@secureitsolutions.com",
+    "vendor_phone": "+1-555-412-3089",
+    "vendor_tax_id": "XX-437730483",
+    "invoice_number": "INV-2026-SIT-0049",
+    "invoice_date": "2026-02-02",
+    "due_date": "2026-03-04",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Cloud Storage",
+        "quantity": 7,
+        "unit_price": 35.5,
+        "total": 248.48
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 5,
+        "unit_price": 118.64,
+        "total": 593.21
+      },
+      {
+        "description": "Consulting Hours",
+        "quantity": 2,
+        "unit_price": 49.58,
+        "total": 99.16
+      },
+      {
+        "description": "Hardware Equipment",
+        "quantity": 5,
+        "unit_price": 32.05,
+        "total": 160.24
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 8,
+        "unit_price": 9.55,
+        "total": 76.39
+      },
+      {
+        "description": "Technical Support",
+        "quantity": 8,
+        "unit_price": 17.16,
+        "total": 137.26
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 4,
+        "unit_price": 13.35,
+        "total": 53.42
+      },
+      {
+        "description": "Domain Registration",
+        "quantity": 1,
+        "unit_price": 38.34,
+        "total": 38.34
+      }
+    ],
+    "subtotal": 1406.5,
+    "tax": 112.52,
+    "tax_rate": 0.08,
+    "total": 1519.02,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  },
+  {
+    "document_id": "doc_00050",
+    "vendor_name": "Acme Corp",
+    "vendor_address": "5801 Business Ave, Suite 270",
+    "vendor_email": "billing@acmecorp.com",
+    "vendor_phone": "+1-555-118-6144",
+    "vendor_tax_id": "XX-644409013",
+    "invoice_number": "INV-2026-A-0050",
+    "invoice_date": "2026-03-03",
+    "due_date": "2026-04-02",
+    "customer_name": "Example Corporation",
+    "customer_address": "123 Main Street, Anytown, ST 12345",
+    "line_items": [
+      {
+        "description": "Consulting Hours",
+        "quantity": 10,
+        "unit_price": 30.65,
+        "total": 306.49
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 10,
+        "unit_price": 10.95,
+        "total": 109.55
+      },
+      {
+        "description": "Professional Services",
+        "quantity": 2,
+        "unit_price": 53.61,
+        "total": 107.21
+      },
+      {
+        "description": "Maintenance Fee",
+        "quantity": 3,
+        "unit_price": 97.7,
+        "total": 293.09
+      },
+      {
+        "description": "Cloud Storage",
+        "quantity": 1,
+        "unit_price": 974.49,
+        "total": 974.49
+      }
+    ],
+    "subtotal": 1790.82,
+    "tax": 147.74,
+    "tax_rate": 0.0825,
+    "total": 1938.56,
+    "currency": "USD",
+    "payment_terms": "Net 30"
+  }
+]
