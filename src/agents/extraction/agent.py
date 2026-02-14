@@ -23,11 +23,15 @@ logger = logging.getLogger(__name__)
 class ExtractorAgent(BaseAgent):
     """Agent responsible for extracting structured data from documents."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        confidence_threshold: float = 0.7,
+    ):
         super().__init__("Extractor", AgentType.EXTRACTION)
         self.vision_extractor = VisionExtractor()
         self.llm_extractor = LLMExtractor()
         self.validator = ExtractionValidator()
+        self.confidence_threshold = confidence_threshold
 
     def get_system_prompt(self) -> str:
         return """You are the Extractor Agent for DocOps, a multi-agent document intelligence system.
@@ -91,7 +95,7 @@ Always validate extractions and provide confidence scores."""
         confidence = calculate_extraction_confidence(extracted_data, doc_type_str)
 
         # Determine if retry is needed
-        needs_retry = confidence < 0.7 or not is_valid
+        needs_retry = confidence < self.confidence_threshold or not is_valid
 
         # Build extraction result
         extraction_result: ExtractionResult = {

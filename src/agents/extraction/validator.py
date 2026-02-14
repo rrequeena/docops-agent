@@ -60,13 +60,20 @@ class ExtractionValidator:
         Returns:
             Tuple of (is_valid, error_message)
         """
-        # Check required fields
-        if field_schema.is_required() and value is None:
+        # Check required fields using Pydantic v2 approach
+        if field_schema.is_required() if hasattr(field_schema, 'is_required') else not field_schema.has_default() and value is None:
             return False, f"Required field '{field_name}' is missing"
 
         # Type validation
         if value is not None:
-            expected_type = field_schema.annotation
+            # Get the annotation from Pydantic v2 FieldInfo
+            if hasattr(field_schema, 'annotation'):
+                expected_type = field_schema.annotation
+            elif hasattr(field_schema, 'type_'):
+                expected_type = field_schema.type_
+            else:
+                return True, None  # Skip type check if we can't determine type
+
             if not isinstance(value, expected_type):
                 return False, f"Field '{field_name}' has incorrect type"
 
@@ -141,9 +148,9 @@ class ExtractionValidator:
         line_items = data.get("line_items", [])
         if line_items:
             calculated_total = sum(
-                item.get("amount", 0) for item in line_items
+                item.get("total", 0) for item in line_items
             )
-            tax = data.get("tax_amount", 0)
+            tax = data.get("tax", 0)
             stated_total = data.get("total", 0)
 
             # Allow small rounding differences
@@ -155,8 +162,16 @@ class ExtractionValidator:
         # Check date ordering
         invoice_date = data.get("invoice_date")
         due_date = data.get("due_date")
-        if invoice_date and due_date and due_date < invoice_date:
-            errors.append("Due date is before invoice date")
+        if invoice_date and due_date:
+            # Handle both string dates and date objects
+            if isinstance(invoice_date, str):
+                from datetime import datetime
+                invoice_date = datetime.fromisoformat(invoice_date.replace("Z", "+00:00")).date() if "T" in invoice_date else datetime.strptime(invoice_date, "%Y-%m-%d").date()
+            if isinstance(due_date, str):
+                from datetime import datetime
+                due_date = datetime.fromisoformat(due_date.replace("Z", "+00:00")).date() if "T" in due_date else datetime.strptime(due_date, "%Y-%m-%d").date()
+            if due_date < invoice_date:
+                errors.append("Due date is before invoice date")
 
         return errors
 

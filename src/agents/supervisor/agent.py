@@ -26,8 +26,14 @@ from src.agents.state import (
 class SupervisorAgent(BaseAgent):
     """Central orchestrator agent that manages the document processing workflow."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        confidence_threshold: float = 0.7,
+        value_threshold: float = 1000.0,
+    ):
         super().__init__("Supervisor", AgentType.SUPERVISOR)
+        self.confidence_threshold = confidence_threshold
+        self.value_threshold = value_threshold
 
     def get_system_prompt(self) -> str:
         return """You are the Supervisor Agent for DocOps, a multi-agent document intelligence system.
@@ -64,6 +70,14 @@ Always respond with a clear routing decision and reasoning."""
         # Initialize step count
         if "step_count" not in state:
             state["step_count"] = 0
+
+        # Initialize result dictionaries if not present
+        if "ingestion_results" not in state:
+            state["ingestion_results"] = {}
+        if "extraction_results" not in state:
+            state["extraction_results"] = {}
+        if "errors" not in state:
+            state["errors"] = []
 
         # Route based on current state
         if current_step is None:
@@ -159,11 +173,15 @@ Always respond with a clear routing decision and reasoning."""
         confidence: float,
         anomaly_detected: bool = False,
         transaction_value: Optional[float] = None,
-        threshold: float = 1000.0,
+        threshold: Optional[float] = None,
     ) -> bool:
         """Determine if approval should be requested."""
+        # Use instance thresholds if not provided
+        if threshold is None:
+            threshold = self.value_threshold
+
         # Low confidence
-        if confidence < 0.7:
+        if confidence < self.confidence_threshold:
             return True
         # Anomaly detected
         if anomaly_detected:
