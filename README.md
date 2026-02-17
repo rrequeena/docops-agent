@@ -110,4 +110,89 @@ MINIO_SECRET_KEY=minioadmin
 # Optional: Observability
 LANGCHAIN_API_KEY=ls-...
 LANGCHAIN_TRACING_V2=true
+
+# Optional: LangSmith Project Name
+LANGCHAIN_PROJECT=docops-agent
 ```
+
+## Running the Application
+
+### Using Docker Compose
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+### Running Locally
+
+```bash
+# Install dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
+
+# Run the API server
+uvicorn src.api.main:app --reload
+
+# Run the Streamlit UI (in another terminal)
+streamlit run src/ui/main.py
+```
+
+## Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src tests/
+
+# Run specific test file
+pytest tests/agents/test_supervisor.py
+```
+
+## Configuration
+
+### Confidence Thresholds
+
+The system uses configurable confidence thresholds for approval gates:
+
+- **Extractor Agent**: Default 0.7 (70% confidence)
+- **Supervisor Agent**: Default 0.7 for low-confidence flagging
+- **Transaction Value**: Default $1,000 threshold for high-value approval
+
+### Anomaly Detection
+
+Anomaly detection is enabled by default with these thresholds:
+
+- **Price Spike**: 50% above vendor average
+- **Duplicate Charge**: Same vendor, amount, and date
+- **Tax Anomaly**: Tax calculation mismatch
+- **Unusual Pattern**: Missing line items, suspicious vendor names
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/documents` | POST | Upload a document |
+| `/documents` | GET | List all documents |
+| `/documents/{id}` | GET | Get document details |
+| `/documents/{id}` | DELETE | Delete a document |
+| `/extraction/{id}` | GET | Get extraction results |
+| `/analysis` | POST | Run analysis on documents |
+| `/analysis/{id}` | GET | Get analysis results |
+| `/approvals` | GET | List pending approvals |
+| `/approvals/{id}` | POST | Approve or reject |
+| `/health` | GET | Health check |
+
+## License
+
+MIT
