@@ -37,6 +37,11 @@ dependencies = [
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry]
+packages = [
+    { include = "src", from = "." }
+]
+
 [tool.poetry.group.dev.dependencies]
 langsmith = "^0.7.3"
 pytest = "^9.0.2"

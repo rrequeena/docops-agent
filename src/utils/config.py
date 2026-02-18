@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     # API Keys
     anthropic_api_key: str = ""
     openai_api_key: str = ""
+    google_api_key: str = ""
     langchain_api_key: str = ""
 
     # LangSmith
@@ -22,15 +23,15 @@ class Settings(BaseSettings):
     langsmith_project: str = "docops-agent"
 
     # Database
-    database_url: str = "postgresql://docops:docops123@localhost:5432/docops"
+    database_url: str = ""
 
     # Redis
     redis_url: str = "redis://localhost:6379/0"
 
     # MinIO
     minio_endpoint: str = "localhost:9000"
-    minio_access_key: str = "minioadmin"
-    minio_secret_key: str = "minioadmin"
+    minio_access_key: str = ""
+    minio_secret_key: str = ""
     minio_bucket: str = "docops"
 
     # ChromaDB
@@ -40,6 +41,7 @@ class Settings(BaseSettings):
     # App settings
     app_name: str = "DocOps Agent"
     debug: bool = False
+    cors_origins: str = "http://localhost:3000,http://localhost:8501"
 
     class Config:
         env_file = ".env"

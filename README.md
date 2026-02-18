@@ -21,7 +21,7 @@ DocOps Agent uses LangGraph to orchestrate specialized agents:
 | Component | Technology |
 |-----------|------------|
 | Agent Orchestration | LangGraph |
-| LLM | Claude API / OpenAI GPT-4o |
+| LLM | Google Gemini |
 | Tool Protocol | MCP |
 | Document Parsing | PyMuPDF + unstructured |
 | Vector Store | ChromaDB |
@@ -41,14 +41,16 @@ cd docops-agent
 # Copy environment template
 cp .env.example .env
 
+# Edit .env and add your GOOGLE_API_KEY
+
 # Start all services
-docker-compose up -d
+docker compose -f docker/docker-compose.yml up -d
 
 # Access the demo UI
 open http://localhost:8501
 
 # Access API docs
-open http://localhost:8000/docs
+open http://localhost:8002/docs
 ```
 
 ## Demo Scenario
@@ -80,23 +82,15 @@ docops-agent/
 
 ## Documentation
 
-- [Project Plan](docs/PROJECT_PLAN.md) - Milestones and timeline
-- [System Design](docs/SYSTEM_DESIGN.md) - High-level architecture
-- [Architecture](docs/ARCHITECTURE.md) - Agent design details
-- [Tech Stack](docs/TECH_STACK.md) - Technology choices
-- [Docker Setup](docs/DOCKER_SETUP.md) - Container configuration
-- [Data Models](docs/DATA_MODELS.md) - Pydantic schemas
 - [API Specification](docs/API_SPEC.md) - REST endpoints
-- [Demo Scenario](docs/DEMO_SCENARIO.md) - Walkthrough
-- [Commit Plan](docs/COMMIT_PLAN.md) - Development history plan
-- [Project Structure](docs/PROJECT_STRUCTURE.md) - Directory layout
+- [Docker Setup](docs/DOCKER_SETUP.md) - Container configuration
+- [Testing Plan](docs/TESTING_PLAN.md) - Testing instructions
 
 ## Environment Variables
 
 ```bash
 # Required
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=AIza...
 
 # Database
 DATABASE_URL=postgresql://docops:docops123@postgres:5432/docops
@@ -121,13 +115,13 @@ LANGCHAIN_PROJECT=docops-agent
 
 ```bash
 # Start all services
-docker-compose up -d
+docker compose -f docker/docker-compose.yml up -d
 
 # View logs
-docker-compose logs -f
+docker compose -f docker/docker-compose.yml logs -f
 
 # Stop services
-docker-compose down
+docker compose -f docker/docker-compose.yml down
 ```
 
 ### Running Locally

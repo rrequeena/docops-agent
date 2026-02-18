@@ -1,21 +1,24 @@
 """
 FastAPI application entry point.
 """
+import logging
 from contextlib import asynccontextmanager
 from typing import Any, Dict
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan handler for startup/shutdown."""
     # Startup
-    print("Starting DocOps Agent API...")
+    logger.info("Starting DocOps Agent API...")
     yield
     # Shutdown
-    print("Shutting down DocOps Agent API...")
+    logger.info("Shutting down DocOps Agent API...")
 
 
 app = FastAPI(
@@ -25,10 +28,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS middleware
+# CORS middleware - configure from environment
+from src.utils.config import get_settings
+settings = get_settings()
+cors_origins = settings.cors_origins.split(",") if settings.cors_origins else ["http://localhost:3000", "http://localhost:8501"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

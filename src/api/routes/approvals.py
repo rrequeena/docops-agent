@@ -24,7 +24,6 @@ def get_settings_lazy():
 async def get_db():
     """Dependency to get database session."""
     settings = get_settings_lazy()
-    settings = get_settings_lazy()
     db = DatabaseService(settings.database_url)
     async with db.async_session() as session:
         yield session

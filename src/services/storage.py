@@ -2,11 +2,14 @@
 MinIO storage service for file operations.
 """
 import io
+import logging
 from typing import Optional
 from uuid import uuid4
 
 import minio
 from minio.error import S3Error
+
+logger = logging.getLogger(__name__)
 
 
 class StorageService:
@@ -36,7 +39,7 @@ class StorageService:
             if not self.client.bucket_exists(self.bucket):
                 self.client.make_bucket(self.bucket)
         except S3Error as e:
-            print(f"Error creating bucket: {e}")
+            logger.error(f"Error creating bucket: {e}")
 
     def upload_file(
         self,

@@ -26,6 +26,15 @@ class VisionExtractor:
 
     def _initialize_model(self):
         """Initialize the Gemini model."""
+        from src.utils.config import get_settings
+        settings = get_settings()
+
+        if not settings.google_api_key:
+            logger.warning("GOOGLE_API_KEY not configured")
+            self.model = None
+            return
+
+        genai.configure(api_key=settings.google_api_key)
         try:
             self.model = genai.GenerativeModel(self.model_name)
         except Exception as e:
@@ -191,10 +200,20 @@ class LLMExtractor:
 
     def _initialize_model(self):
         """Initialize the Gemini model."""
+        from src.utils.config import get_settings
+        settings = get_settings()
+
+        if not settings.google_api_key:
+            logger.warning("GOOGLE_API_KEY not configured")
+            self.model = None
+            return
+
+        genai.configure(api_key=settings.google_api_key)
         try:
             self.model = genai.GenerativeModel(self.model_name)
         except Exception as e:
             logger.warning(f"Failed to initialize Gemini model: {e}")
+            self.model = None
 
     def extract(
         self,

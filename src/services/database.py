@@ -88,9 +88,10 @@ class DatabaseService:
                 query = query.filter(Document.status == status)
             if document_type:
                 query = query.filter(Document.document_type == document_type)
-            return await session.execute(
+            result = await session.execute(
                 query.order_by(Document.uploaded_at.desc()).limit(limit).offset(offset)
             )
+            return list(result.scalars().all())
 
     async def update_document_status(
         self,
