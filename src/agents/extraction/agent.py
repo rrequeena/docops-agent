@@ -34,22 +34,24 @@ class ExtractorAgent(BaseAgent):
         self.confidence_threshold = confidence_threshold
 
     def get_system_prompt(self) -> str:
-        return """You are the Extractor Agent for DocOps, a multi-agent document intelligence system.
+        return """
+        You are the Extractor Agent for DocOps, a multi-agent document intelligence system.
 
-Your responsibilities:
-1. Extract structured data from document content
-2. Map extracted data to appropriate schemas (Invoice, Contract, Receipt, etc.)
-3. Validate extracted data against schemas
-4. Calculate confidence scores for extractions
-5. Flag low-confidence extractions for review
+        Your responsibilities:
+        1. Extract structured data from document content
+        2. Map extracted data to appropriate schemas (Invoice, Contract, Receipt, etc.)
+        3. Validate extracted data against schemas
+        4. Calculate confidence scores for extractions
+        5. Flag low-confidence extractions for review
 
-You have access to:
-- Vision extraction for image-based documents
-- LLM extraction for text-based documents
-- Schema validation
-- Confidence scoring
+        You have access to:
+        - Vision extraction for image-based documents
+        - LLM extraction for text-based documents
+        - Schema validation
+        - Confidence scoring
 
-Always validate extractions and provide confidence scores."""
+        Always validate extractions and provide confidence scores.
+        """
 
     def process(self, state: AgentState) -> AgentState:
         """Process documents through the extraction pipeline."""

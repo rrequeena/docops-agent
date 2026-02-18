@@ -2,141 +2,127 @@
 Streamlit page for viewing analysis results.
 """
 import streamlit as st
-from datetime import datetime, timedelta
-import random
+import requests
+
+
+API_BASE_URL = "http://api:8000"
 
 
 def render_analysis_page():
     """Render the analysis dashboard page."""
     st.header("Analysis Dashboard")
 
+    # Fetch documents from API
+    try:
+        response = requests.get(f"{API_BASE_URL}/api/v1/documents", timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            documents = data.get("documents", [])
+            # Filter to only show processed documents with extractions
+            docs_with_extraction = [d for d in documents if d.get("extraction")]
+        else:
+            st.error(f"Failed to fetch documents: {response.text}")
+            docs_with_extraction = []
+    except Exception as e:
+        st.error(f"Error connecting to API: {e}")
+        docs_with_extraction = []
+
     # Summary metrics
+    total_docs = len(documents)
+    total_value = sum(
+        float(d.get("extraction", {}).get("data", {}).get("total", 0) or 0)
+        for d in docs_with_extraction
+    )
+    vendors = set(
+        d.get("extraction", {}).get("data", {}).get("vendor_name")
+        for d in docs_with_extraction if d.get("extraction", {}).get("data", {}).get("vendor_name")
+    )
+
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("Total Documents", "127", "+12")
+        st.metric("Total Documents", str(total_docs))
     with col2:
-        st.metric("Total Value", "$245K", "+18%")
+        st.metric("Total Value", f"${total_value:,.2f}")
     with col3:
-        st.metric("Active Vendors", "23", "+2")
+        st.metric("Active Vendors", str(len(vendors)))
     with col4:
-        st.metric("Anomalies", "8", "-3")
+        st.metric("Processed", str(len(docs_with_extraction)))
 
     st.divider()
 
-    # Charts section
-    col_chart1, col_chart2 = st.columns(2)
+    # Documents with extractions
+    if not docs_with_extraction:
+        st.info("No processed documents with extractions yet. Upload and process a document first.")
+        return
 
-    with col_chart1:
-        st.subheader("Monthly Spending")
-        import pandas as pd
-        months = ["Oct", "Nov", "Dec", "Jan", "Feb"]
-        values = [42000, 48000, 51000, 55000, 62000]
-        df = pd.DataFrame({"Month": months, "Value": values})
-        st.bar_chart(df, x="Month", y="Value")
+    # Allow selecting a document to analyze
+    doc_options = {d["id"]: f"{d['filename']} - {d.get('extraction', {}).get('data', {}).get('vendor_name', 'N/A')}" for d in docs_with_extraction}
+    selected_doc_id = st.selectbox("Select Document", list(doc_options.keys()), format_func=lambda x: doc_options[x])
 
-    with col_chart2:
-        st.subheader("Documents by Type")
-        chart_data = {"Invoice": 78, "Contract": 24, "Receipt": 18, "Form": 7}
-        st.bar_chart(chart_data)
+    if selected_doc_id:
+        # Fetch analysis for selected document
+        try:
+            analysis_response = requests.get(f"{API_BASE_URL}/api/v1/analysis/document/{selected_doc_id}", timeout=10)
+            if analysis_response.status_code == 200:
+                analysis_data = analysis_response.json()
+            else:
+                analysis_data = {"anomalies": [], "metrics": {}, "summary": "No analysis available"}
+        except:
+            analysis_data = {"anomalies": [], "metrics": {}, "summary": "Error fetching analysis"}
 
-    st.divider()
+        anomalies = analysis_data.get("anomalies", [])
+        metrics = analysis_data.get("metrics", {})
 
-    # Anomalies section
-    st.subheader("Detected Anomalies")
+        # Anomalies section
+        st.subheader("Detected Anomalies")
 
-    # Mock anomalies
-    anomalies = [
-        {
-            "type": "price_spike",
-            "severity": "warning",
-            "description": "Price 67% above vendor average",
-            "vendor": "Acme Corp",
-            "invoice": "INV-2026-0156",
-            "amount": 2450.00,
-            "average": 1465.00,
-            "documents": ["doc_005", "doc_008"]
-        },
-        {
-            "type": "duplicate_charge",
-            "severity": "critical",
-            "description": "Potential duplicate charges detected",
-            "vendor": "TechSupply Inc",
-            "invoice": "INV-2026-0089, INV-2026-0090",
-            "amount": 1500.00,
-            "documents": ["doc_012", "doc_013"]
-        },
-        {
-            "type": "tax_anomaly",
-            "severity": "warning",
-            "description": "Tax calculation mismatch",
-            "vendor": "Office Depot",
-            "invoice": "RCT-2026-0234",
-            "amount": 45.50,
-            "documents": ["doc_018"]
-        },
-    ]
+        if not anomalies:
+            st.success("No anomalies detected!")
+        else:
+            # Filter by severity
+            severity_filter = st.selectbox("Filter by Severity", ["all", "critical", "warning", "info"])
 
-    # Filter by severity
-    severity_filter = st.selectbox("Filter by Severity", ["all", "critical", "warning", "info"])
+            filtered_anomalies = anomalies
+            if severity_filter != "all":
+                filtered_anomalies = [a for a in filtered_anomalies if a.get("severity") == severity_filter]
 
-    filtered_anomalies = anomalies
-    if severity_filter != "all":
-        filtered_anomalies = [a for a in filtered_anomalies if a["severity"] == severity_filter]
+            for i, anomaly in enumerate(filtered_anomalies):
+                severity = anomaly.get("severity", "info")
+                severity_emoji = {"critical": "🔴", "warning": "🟡", "info": "🔵"}.get(severity, "⚪")
 
-    for i, anomaly in enumerate(filtered_anomalies):
-        severity_color = {
-            "critical": "🔴",
-            "warning": "🟡",
-            "info": "🔵"
-        }.get(anomaly["severity"], "⚪")
+                with st.expander(f"{severity_emoji} {anomaly.get('anomaly_type', 'Unknown').replace('_', ' ').title()}", expanded=True):
+                    st.write(f"**Description:** {anomaly.get('description', 'N/A')}")
+                    st.write(f"**Severity:** {severity.title()}")
 
-        with st.expander(f"{severity_color} {anomaly['type'].replace('_', ' ').title()} - {anomaly['vendor']}", expanded=True):
-            col_a, col_b = st.columns(2)
+                    details = anomaly.get("details", {})
+                    for key, value in details.items():
+                        st.write(f"**{key}:** {value}")
 
-            with col_a:
-                st.write(f"**Description:** {anomaly['description']}")
-                st.write(f"**Invoice(s):** {anomaly['invoice']}")
-
-            with col_b:
-                st.write(f"**Severity:** {anomaly['severity'].title()}")
-                if "amount" in anomaly:
-                    st.write(f"**Amount:** ${anomaly['amount']:,.2f}")
-                if "average" in anomaly:
-                    st.write(f"**Average:** ${anomaly['average']:,.2f}")
-
-            col_act1, col_act2, col_act3 = st.columns(3)
-            with col_act1:
-                st.button("Review", key=f"review_{i}")
-            with col_act2:
-                st.button("Dismiss", key=f"dismiss_{i}")
-            with col_act3:
-                st.button("Flag for Approval", key=f"flag_{i}")
+                    if anomaly.get("recommendation"):
+                        st.write(f"**Recommendation:** {anomaly['recommendation']}")
 
     st.divider()
 
-    # Vendor analysis
-    st.subheader("Vendor Analysis")
+    # All documents analysis
+    st.subheader("All Document Metrics")
 
-    vendor_data = {
-        "Acme Corp": {"invoices": 34, "total": 85000, "avg": 2500, "anomalies": 3},
-        "TechSupply Inc": {"invoices": 22, "total": 62000, "avg": 2818, "anomalies": 2},
-        "CloudServices LLC": {"invoices": 15, "total": 45000, "avg": 3000, "anomalies": 0},
-        "Office Depot": {"invoices": 28, "total": 28000, "avg": 1000, "anomalies": 1},
-    }
+    for doc in docs_with_extraction:
+        extraction = doc.get("extraction", {})
+        data = extraction.get("data", {})
 
-    for vendor, data in vendor_data.items():
-        with st.expander(f"{vendor}"):
-            col_v1, col_v2, col_v3, col_v4 = st.columns(4)
+        with st.expander(f"{doc['filename']} - {data.get('vendor_name', 'N/A')}"):
+            col1, col2, col3, col4 = st.columns(4)
 
-            with col_v1:
-                st.metric("Invoices", data["invoices"])
-            with col_v2:
-                st.metric("Total Value", f"${data['total']:,}")
-            with col_v3:
-                st.metric("Avg Invoice", f"${data['avg']:,.0f}")
-            with col_v4:
-                st.metric("Anomalies", data["anomalies"], delta=-data["anomalies"] if data["anomalies"] > 0 else 0)
+            with col1:
+                st.metric("Invoice #", data.get("invoice_number", "N/A"))
+            with col2:
+                st.metric("Total", f"${float(data.get('total', 0)):,.2f}")
+            with col3:
+                st.metric("Confidence", f"{extraction.get('confidence', 0) * 100:.0f}%")
+            with col4:
+                date = data.get("invoice_date", "N/A")
+                st.metric("Date", str(date))
 
 
 __all__ = ["render_analysis_page"]

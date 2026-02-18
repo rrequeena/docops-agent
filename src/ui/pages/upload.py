@@ -66,7 +66,7 @@ def render_upload_page():
                     # Trigger processing
                     process_response = requests.post(
                         f"{API_BASE_URL}/api/v1/documents/{document_id}/process",
-                        timeout=30
+                        timeout=60
                     )
 
                     if process_response.status_code == 202:
@@ -142,14 +142,31 @@ def render_upload_page():
                                         anomalies = analysis_data.get("anomalies", [])
                                         if anomalies:
                                             for anomaly in anomalies:
-                                                st.warning(f"**{anomaly.get('type', 'Unknown')}:** {anomaly.get('description', '')}")
+                                                severity = anomaly.get("severity", "info")
+                                                if severity == "critical":
+                                                    st.error(f"**{anomaly.get('anomaly_type', 'Unknown').replace('_', ' ').title()}:** {anomaly.get('description', '')}")
+                                                elif severity == "warning":
+                                                    st.warning(f"**{anomaly.get('anomaly_type', 'Unknown').replace('_', ' ').title()}:** {anomaly.get('description', '')}")
+                                                else:
+                                                    st.info(f"**{anomaly.get('anomaly_type', 'Unknown').replace('_', ' ').title()}:** {anomaly.get('description', '')}")
                                         else:
-                                            st.info("No anomalies detected")
+                                            st.success("No anomalies detected!")
                                     else:
                                         st.info("Analysis not available yet")
 
                                 with analysis_tab2:
-                                    st.write("Run analysis to see insights")
+                                    if analysis_resp.status_code == 200:
+                                        analysis_data = analysis_resp.json()
+                                        metrics = analysis_data.get("metrics", {})
+
+                                        st.write(f"**Summary:** {analysis_data.get('summary', 'N/A')}")
+
+                                        if metrics:
+                                            st.write("**Metrics:**")
+                                            for key, value in metrics.items():
+                                                st.write(f"- {key}: {value}")
+                                    else:
+                                        st.info("Analysis not available yet")
                         else:
                             st.warning(f"Extraction status: {extraction_resp.status_code} - {extraction_resp.text}")
                     else:

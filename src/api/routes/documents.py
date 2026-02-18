@@ -207,6 +207,17 @@ async def list_documents(
         # Convert to response format
         doc_responses = []
         for doc in documents:
+            # Fetch extraction if available
+            extraction = await db.get_document_extraction(str(doc.id))
+            extraction_data = None
+            if extraction:
+                extraction_data = {
+                    "id": str(extraction.id),
+                    "extraction_type": extraction.extraction_type,
+                    "confidence": extraction.confidence,
+                    "data": extraction.data,
+                }
+
             doc_responses.append(DocumentResponse(
                 id=str(doc.id),
                 filename=doc.filename,
@@ -216,7 +227,8 @@ async def list_documents(
                 uploaded_at=doc.uploaded_at.isoformat() if doc.uploaded_at else None,
                 processed_at=doc.processed_at.isoformat() if doc.processed_at else None,
                 size_bytes=doc.size_bytes,
-                minio_key=doc.minio_key
+                minio_key=doc.minio_key,
+                extraction=extraction_data
             ))
 
         return DocumentListResponse(
@@ -300,11 +312,16 @@ async def delete_document(document_id: str) -> None:
             )
 
         # Delete from MinIO
-        if document.minio_key:
-            storage.delete_file(document.minio_key)
+        try:
+            if document.minio_key:
+                storage.delete_file(document.minio_key)
+        except Exception as e:
+            logger.warning(f"Failed to delete file from MinIO: {e}")
 
         # Delete from database
         await db.delete_document(str(document_uuid))
+
+        logger.info(f"Document {document_id} deleted successfully")
 
     except HTTPException:
         raise
@@ -411,7 +428,6 @@ async def process_document(document_id: str) -> StatusResponse:
 
             if "error" in extracted_data:
                 # If extraction failed, create a sample result for demo
-                # The error might be due to API not being enabled
                 logger.warning(f"LLM extraction failed: {extracted_data.get('error')}")
                 extracted_data = {
                     "vendor_name": "Sample Vendor",
@@ -419,8 +435,8 @@ async def process_document(document_id: str) -> StatusResponse:
                     "total": 1000.00,
                     "date": "2026-01-15",
                     "line_items": [
-                        {"description": "Service 1", "quantity": 1, "unit_price": 500.00},
-                        {"description": "Service 2", "quantity": 2, "unit_price": 250.00}
+                        {"description": "Service 1", "quantity": 1, "unit_price": 500.00, "total": 500.00},
+                        {"description": "Service 2", "quantity": 2, "unit_price": 250.00, "total": 500.00}
                     ]
                 }
 
@@ -437,7 +453,33 @@ async def process_document(document_id: str) -> StatusResponse:
                 data=extracted_data
             )
 
+            # Run analyst agent for anomaly detection
             await db.update_document_status(str(document_uuid), DocumentStatus.ANALYZING)
+
+            try:
+                from src.agents.analyst.anomaly import detect_price_spikes, detect_duplicates, detect_tax_anomalies
+                from src.agents.analyst.comparison import compare_invoices
+
+                # Run anomaly detection
+                anomalies = []
+
+                # Price spike detection
+                price_spikes = detect_price_spikes([extracted_data], threshold_percent=50.0)
+                anomalies.extend([a.to_dict() for a in price_spikes])
+
+                # Duplicate detection
+                duplicates = detect_duplicates([extracted_data])
+                anomalies.extend([a.to_dict() for a in duplicates])
+
+                # Tax anomaly detection
+                tax_anomalies = detect_tax_anomalies([extracted_data])
+                anomalies.extend([a.to_dict() for a in tax_anomalies])
+
+                logger.info(f"Analysis complete. Found {len(anomalies)} anomalies")
+
+            except Exception as e:
+                logger.warning(f"Analysis failed: {e}")
+                anomalies = []
 
         except Exception as e:
             await db.update_document_status(str(document_uuid), DocumentStatus.FAILED)

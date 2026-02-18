@@ -108,10 +108,29 @@ class DatabaseService:
             return document
 
     async def delete_document(self, document_id: str) -> bool:
-        """Delete a document."""
+        """Delete a document and its related records."""
         async with self.async_session() as session:
             document = await session.get(Document, document_id)
             if document:
+                # Delete related extractions first
+                from src.models.extraction import Extraction
+                result = await session.execute(
+                    select(Extraction).where(Extraction.document_id == document_id)
+                )
+                extractions = result.scalars().all()
+                for ext in extractions:
+                    await session.delete(ext)
+
+                # Delete related approvals
+                from src.models.approval import Approval
+                result = await session.execute(
+                    select(Approval).where(Approval.document_id == document_id)
+                )
+                approvals = result.scalars().all()
+                for app in approvals:
+                    await session.delete(app)
+
+                # Delete the document
                 await session.delete(document)
                 await session.commit()
                 return True
