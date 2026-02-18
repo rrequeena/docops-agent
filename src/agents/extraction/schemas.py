@@ -40,12 +40,16 @@ class InvoiceExtraction(BaseModel):
     currency: str = "USD"
     payment_terms: Optional[str] = None
     notes: Optional[str] = None
+    # Additional invoice fields
+    previous_balance: Optional[Decimal] = Field(None, decimal_places=2, description="Previous balance or amount due from previous period")
+    payments_credits: Optional[Decimal] = Field(None, decimal_places=2, description="Payments and credits applied")
+    total_due: Optional[Decimal] = Field(None, decimal_places=2, description="Final total amount due including previous balance")
 
     @field_validator('line_items', mode='before')
     @classmethod
     def validate_line_items(cls, v):
         if not v:
-            raise ValueError('At least one line item required')
+            return []
         return v
 
 

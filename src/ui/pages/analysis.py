@@ -29,9 +29,11 @@ def render_analysis_page():
 
     with col_chart1:
         st.subheader("Monthly Spending")
+        import pandas as pd
         months = ["Oct", "Nov", "Dec", "Jan", "Feb"]
         values = [42000, 48000, 51000, 55000, 62000]
-        st.bar_chart(values, labels={i: m for i, m in enumerate(months)})
+        df = pd.DataFrame({"Month": months, "Value": values})
+        st.bar_chart(df, x="Month", y="Value")
 
     with col_chart2:
         st.subheader("Documents by Type")

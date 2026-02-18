@@ -40,9 +40,9 @@ class Document(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     filename = Column(String(512), nullable=False)
     content_type = Column(String(128), nullable=False)
-    document_type = Column(Enum(DocumentType), nullable=True)
+    document_type = Column(Enum(DocumentType, values_callable=lambda x: [e.value for e in x], native_enum=False), nullable=True)
     status = Column(
-        Enum(DocumentStatus),
+        Enum(DocumentStatus, values_callable=lambda x: [e.value for e in x], native_enum=False),
         default=DocumentStatus.UPLOADED,
         nullable=False
     )

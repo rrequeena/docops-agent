@@ -34,11 +34,11 @@ class Approval(Base):
         nullable=False
     )
     request_type = Column(
-        Enum(RequestType),
+        Enum(RequestType, values_callable=lambda x: [e.value for e in x], native_enum=False),
         nullable=False
     )
     status = Column(
-        Enum(ApprovalStatus),
+        Enum(ApprovalStatus, values_callable=lambda x: [e.value for e in x], native_enum=False),
         default=ApprovalStatus.PENDING,
         nullable=False
     )

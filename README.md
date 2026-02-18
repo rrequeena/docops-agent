@@ -1,4 +1,4 @@
-# DocOps Agent — Multi-Agent System for Automated Document Processing & Analysis
+# (⚠️ WIP ⚠️) DocOps Agent — Multi-Agent System for Automated Document Processing & Analysis
 
 A production-grade multi-agent system where specialized agents collaborate to ingest, extract, analyze, and act on diverse documents with full observability.
 

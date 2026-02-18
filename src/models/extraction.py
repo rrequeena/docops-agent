@@ -37,13 +37,13 @@ class Extraction(Base):
     extraction_type = Column(String(64), nullable=False)
     confidence = Column(Float, nullable=False)
     confidence_level = Column(
-        Enum(ConfidenceLevel),
+        Enum(ConfidenceLevel, values_callable=lambda x: [e.value for e in x], native_enum=False),
         nullable=False
     )
     data = Column(JSON, nullable=False)
     warnings = Column(JSON, default=list, nullable=False)
     status = Column(
-        Enum(ExtractionStatus),
+        Enum(ExtractionStatus, values_callable=lambda x: [e.value for e in x], native_enum=False),
         default=ExtractionStatus.PENDING,
         nullable=False
     )

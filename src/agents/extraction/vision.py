@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class VisionExtractor:
     """Extracts structured data from documents using Gemini vision."""
 
-    def __init__(self, model_name: str = "gemini-1.5-flash"):
+    def __init__(self, model_name: str = "gemini-3-flash-preview"):
         self.model_name = model_name
         self.model = None
         self._initialize_model()
@@ -193,7 +193,7 @@ Return ONLY valid JSON matching the schema. If a field is not present in the doc
 class LLMExtractor:
     """Extracts structured data using LLM text generation."""
 
-    def __init__(self, model_name: str = "gemini-1.5-flash"):
+    def __init__(self, model_name: str = "gemini-3-flash-preview"):
         self.model_name = model_name
         self.model = None
         self._initialize_model()

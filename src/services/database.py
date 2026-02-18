@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import select
 
 from src.models.document import Base, Document, DocumentStatus, DocumentType
 from src.models.extraction import Extraction, ExtractionStatus, ConfidenceLevel
@@ -83,14 +84,13 @@ class DatabaseService:
     ) -> list[Document]:
         """List documents with optional filters."""
         async with self.async_session() as session:
-            query = session.query(Document)
+            query = select(Document)
             if status:
-                query = query.filter(Document.status == status)
+                query = query.where(Document.status == status)
             if document_type:
-                query = query.filter(Document.document_type == document_type)
-            result = await session.execute(
-                query.order_by(Document.uploaded_at.desc()).limit(limit).offset(offset)
-            )
+                query = query.where(Document.document_type == document_type)
+            query = query.order_by(Document.uploaded_at.desc()).limit(limit).offset(offset)
+            result = await session.execute(query)
             return list(result.scalars().all())
 
     async def update_document_status(
@@ -151,12 +151,8 @@ class DatabaseService:
     async def get_document_extraction(self, document_id: str) -> Optional[Extraction]:
         """Get extraction for a document."""
         async with self.async_session() as session:
-            result = await session.execute(
-                session.query(Extraction)
-                .filter(Extraction.document_id == document_id)
-                .order_by(Extraction.created_at.desc())
-                .limit(1)
-            )
+            query = select(Extraction).where(Extraction.document_id == document_id).order_by(Extraction.created_at.desc()).limit(1)
+            result = await session.execute(query)
             return result.scalar_one_or_none()
 
     # Approval operations
@@ -187,12 +183,9 @@ class DatabaseService:
     async def list_pending_approvals(self) -> list[Approval]:
         """List all pending approvals."""
         async with self.async_session() as session:
-            result = await session.execute(
-                session.query(Approval)
-                .filter(Approval.status == ApprovalStatus.PENDING)
-                .order_by(Approval.requested_at.asc())
-            )
-            return result.scalars().all()
+            query = select(Approval).where(Approval.status == ApprovalStatus.PENDING).order_by(Approval.requested_at.asc())
+            result = await session.execute(query)
+            return list(result.scalars().all())
 
     async def update_approval_status(
         self,
