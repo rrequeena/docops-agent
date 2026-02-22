@@ -136,8 +136,7 @@ poetry shell
 # Run the API server
 uvicorn src.api.main:app --reload
 
-# Run the Streamlit UI (in another terminal)
-streamlit run src/ui/main.py
+# Access the UI at http://localhost:8000/app
 ```
 
 ## Testing

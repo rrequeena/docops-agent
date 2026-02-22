@@ -2,6 +2,7 @@
 Document management API endpoints.
 """
 import logging
+import os
 from typing import List, Optional
 from uuid import UUID
 
@@ -179,7 +180,7 @@ async def upload_documents(
 @router.get("", response_model=DocumentListResponse)
 async def list_documents(
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    page_size: int = Query(20, ge=1, le=500),
     filter_status: Optional[str] = None,
     document_type: Optional[str] = None,
 ) -> DocumentListResponse:
@@ -215,6 +216,7 @@ async def list_documents(
                     "id": str(extraction.id),
                     "extraction_type": extraction.extraction_type,
                     "confidence": extraction.confidence,
+                    "confidence_level": extraction.confidence_level.value if extraction.confidence_level else None,
                     "data": extraction.data,
                 }
 
@@ -267,6 +269,18 @@ async def get_document(document_id: str) -> DocumentResponse:
                 detail="Document not found"
             )
 
+        # Fetch extraction if available
+        extraction = await db.get_document_extraction(str(document_uuid))
+        extraction_data = None
+        if extraction:
+            extraction_data = {
+                "id": str(extraction.id),
+                "extraction_type": extraction.extraction_type,
+                "confidence": extraction.confidence,
+                "confidence_level": extraction.confidence_level.value if extraction.confidence_level else None,
+                "data": extraction.data,
+            }
+
         return DocumentResponse(
             id=str(document.id),
             filename=document.filename,
@@ -276,7 +290,8 @@ async def get_document(document_id: str) -> DocumentResponse:
             uploaded_at=document.uploaded_at.isoformat() if document.uploaded_at else None,
             processed_at=document.processed_at.isoformat() if document.processed_at else None,
             size_bytes=document.size_bytes,
-            minio_key=document.minio_key
+            minio_key=document.minio_key,
+            extraction=extraction_data
         )
     except HTTPException:
         raise
@@ -442,8 +457,21 @@ async def process_document(document_id: str) -> StatusResponse:
 
             # Save extraction to database
             from src.models.extraction import ConfidenceLevel
-            confidence = 0.8 if extracted_data else 0.5
-            conf_level = ConfidenceLevel.HIGH if confidence >= 0.7 else ConfidenceLevel.MEDIUM
+
+            # Get confidence threshold from database (default 0.7)
+            try:
+                db_service = get_database_service()
+                confidence_threshold = await db_service.get_setting("confidence_threshold", "0.7")
+                confidence_threshold = float(confidence_threshold)
+            except:
+                confidence_threshold = 0.7
+
+            # Calculate confidence - in real implementation this comes from LLM
+            # For now, we set it based on whether extraction has data
+            confidence = 0.9 if extracted_data and not extracted_data.get("error") else 0.4
+
+            # Determine confidence level based on threshold
+            conf_level = ConfidenceLevel.HIGH if confidence >= confidence_threshold else ConfidenceLevel.MEDIUM
 
             extraction = await db.create_extraction(
                 document_id=str(document_uuid),

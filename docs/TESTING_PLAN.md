@@ -27,7 +27,7 @@ cp .env.example .env
 ### 2. Start Services with Docker Compose
 
 ```bash
-# Start all services (postgres, redis, minio, chroma, api, worker, streamlit)
+# Start all services (postgres, redis, minio, chroma, api, worker)
 docker-compose up -d
 
 # Verify all services are running
@@ -41,7 +41,6 @@ docops-agent-api-1     …                   "uvicorn ..."        Up
 docops-agent-minio-1    …                   "/entrypoint.sh …"   Up
 docops-agent-postgres-1 …                   "postgres ..."       Up
 docops-agent-redis-1    …                   "redis-server …"     Up
-docops-agent-streamlit-1 …                  "streamlit run …"    Up
 docops-agent-worker-1   …                   "celery -A …"        Up
 docops-agent-chroma-1   …                   "chroma run …"       Up
 ```
@@ -59,8 +58,8 @@ curl http://localhost:8000/
 
 # Expected: {"message":"DocOps Agent API","version":"1.0.0"}
 
-# Access Streamlit UI
-# Open http://localhost:8501 in your browser
+# Access the frontend UI
+# Open http://localhost:8000/app in your browser
 ```
 
 ## Test Scenarios
@@ -191,9 +190,6 @@ export MINIO_SECRET_KEY=minioadmin
 
 # Run the API
 uvicorn src.api.main:app --reload
-
-# Run Streamlit (in another terminal)
-streamlit run src/ui/main.py
 
 # Run tests
 pytest tests/

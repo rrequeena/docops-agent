@@ -41,7 +41,6 @@ flowchart TB
     end
 
     subgraph Docker["Docker Network"]
-        Streamlit["streamlit<br/>:8501"]
         API["api<br/>:8000"]
         Worker["worker<br/>(Celery)"]
         Redis["redis<br/>:6379"]
@@ -50,7 +49,6 @@ flowchart TB
         Chroma["chroma<br/>:8000"]
     end
 
-    Streamlit --> API
     API --> Worker
     Worker --> Redis
     API --> MinIO
@@ -67,7 +65,6 @@ flowchart TB
 | Service | Image | Port | Description |
 |---------|-------|------|-------------|
 | api | custom | 8000 | FastAPI application |
-| streamlit | custom | 8501 | Demo UI |
 | worker | custom | - | Celery worker |
 | redis | redis:7-alpine | 6379 | Task queue broker |
 | minio | minio/minio | 9000, 9001 | S3-compatible storage |
@@ -212,21 +209,6 @@ services:
     environment:
       - C_FORCE_ROOT=true
 
-  # Streamlit Demo UI
-  streamlit:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    command: streamlit run src/ui/main.py --server.port=8501 --server.address=0.0.0.0
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-    ports:
-      - "8501:8501"
-    depends_on:
-      - api
-
 volumes:
   postgres_data:
   minio_data:
@@ -265,7 +247,7 @@ RUN pip install --no-cache-dir -e .
 # Create uploads directory
 RUN mkdir -p /app/data/uploads
 
-EXPOSE 8000 8501
+EXPOSE 8000
 
 CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
@@ -319,7 +301,6 @@ docops-agent-chroma-1   chromadb/chroma        running (healthy)   0.0.0.0:8000-
 docops-agent-minio-1    minio/minio            running (healthy)   0.0.0.0:9000->9000/tcp
 docops-agent-postgres-1 postgres:16-alpine     running (healthy)   0.0.0.0:5432->5432/tcp
 docops-agent-redis-1    redis:7-alpine         running (healthy)   0.0.0.0:6379->6379/tcp
-docops-agent-streamlit-1 docops-agent-streamlit running (healthy)   0.0.0.0:8501->8501/tcp
 docops-agent-worker-1   docops-agent-worker-1   running           -
 ```
 

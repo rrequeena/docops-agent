@@ -101,21 +101,6 @@ services:
     environment:
       - C_FORCE_ROOT=true
 
-  # Streamlit Demo UI
-  streamlit:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    command: streamlit run src/ui/main.py --server.port=8501 --server.address=0.0.0.0
-    env_file:
-      - ../.env
-    volumes:
-      - ..:/app
-    ports:
-      - "8501:8501"
-    depends_on:
-      - api
-
 volumes:
   postgres_data:
   minio_data:

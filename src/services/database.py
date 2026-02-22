@@ -11,6 +11,7 @@ from sqlalchemy import select
 from src.models.document import Base, Document, DocumentStatus, DocumentType
 from src.models.extraction import Extraction, ExtractionStatus, ConfidenceLevel
 from src.models.approval import Approval, ApprovalStatus, RequestType
+from src.models.settings import AppSettings
 
 
 class DatabaseService:
@@ -227,3 +228,56 @@ class DatabaseService:
                 await session.commit()
                 await session.refresh(approval)
             return approval
+
+    # Settings operations
+    async def get_setting(self, key: str, default: str = None) -> Optional[str]:
+        """Get a setting value by key."""
+        async with self.async_session() as session:
+            result = await session.execute(
+                select(AppSettings).where(AppSettings.key == key)
+            )
+            setting = result.scalar_one_or_none()
+            return setting.value if setting else default
+
+    async def set_setting(self, key: str, value: str, value_type: str = "string", description: str = None) -> AppSettings:
+        """Set a setting value."""
+        async with self.async_session() as session:
+            result = await session.execute(
+                select(AppSettings).where(AppSettings.key == key)
+            )
+            setting = result.scalar_one_or_none()
+
+            if setting:
+                setting.value = value
+                setting.value_type = value_type
+                if description:
+                    setting.description = description
+            else:
+                setting = AppSettings(
+                    key=key,
+                    value=value,
+                    value_type=value_type,
+                    description=description
+                )
+                session.add(setting)
+
+            await session.commit()
+            await session.refresh(setting)
+            return setting
+
+    async def get_all_settings(self) -> dict:
+        """Get all settings as a dictionary."""
+        async with self.async_session() as session:
+            result = await session.execute(select(AppSettings))
+            settings = result.scalars().all()
+            return {s.key: self._convert_value(s.value, s.value_type) for s in settings}
+
+    def _convert_value(self, value: str, value_type: str):
+        """Convert string value to appropriate type."""
+        if value_type == "int":
+            return int(value)
+        elif value_type == "float":
+            return float(value)
+        elif value_type == "bool":
+            return value.lower() in ("true", "1", "yes")
+        return value

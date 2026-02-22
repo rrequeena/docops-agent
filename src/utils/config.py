@@ -43,6 +43,10 @@ class Settings(BaseSettings):
     debug: bool = False
     cors_origins: str = "http://localhost:3000,http://localhost:8501"
 
+    # Processing settings
+    confidence_threshold: float = 0.7
+    value_threshold: float = 1000.0
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
