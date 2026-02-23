@@ -4,12 +4,15 @@ Provides LangSmith integration and latency tracking.
 """
 import os
 import time
+import logging
 import functools
 from typing import Optional, Callable, Any
 from datetime import datetime
 from contextlib import contextmanager
 
 from src.utils.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 
 class LatencyTracker:
@@ -59,15 +62,23 @@ def setup_langsmith_tracing():
     Returns:
         True if tracing is configured, False otherwise
     """
+    # Check both config settings and direct environment variables
+    # (LANGCHAIN_API_KEY and LANGCHAIN_TRACING_V2 are the standard env var names)
     settings = get_settings()
 
-    if not settings.langchain_tracing_v2 or not settings.langsmith_api_key:
+    # Get API key from either config or direct env var
+    api_key = settings.langsmith_api_key or os.environ.get("LANGCHAIN_API_KEY", "")
+    tracing_enabled = settings.langchain_tracing_v2 or os.environ.get("LANGCHAIN_TRACING_V2", "").lower() == "true"
+
+    if not tracing_enabled or not api_key:
+        logger.info(f"LangSmith tracing not configured. tracing_enabled={tracing_enabled}, has_api_key={bool(api_key)}")
         return False
 
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
-    os.environ["LANGCHAIN_API_KEY"] = settings.langsmith_api_key
+    os.environ["LANGCHAIN_API_KEY"] = api_key
     os.environ["LANGCHAIN_PROJECT"] = settings.langsmith_project
 
+    logger.info("LangSmith tracing configured successfully")
     return True
 
 

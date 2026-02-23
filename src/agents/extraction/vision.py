@@ -7,6 +7,7 @@ import json
 from typing import Dict, Any, Optional
 
 import google.generativeai as genai
+from langsmith import traceable
 
 from src.agents.extraction.schemas import (
     get_extraction_schema,
@@ -27,7 +28,12 @@ class VisionExtractor:
     def _initialize_model(self):
         """Initialize the Gemini model."""
         from src.utils.config import get_settings
+        from src.utils.observability import setup_langsmith_tracing
+
         settings = get_settings()
+
+        # Set up LangSmith tracing if not already done
+        setup_langsmith_tracing()
 
         if not settings.google_api_key:
             logger.warning("GOOGLE_API_KEY not configured")
@@ -41,6 +47,7 @@ class VisionExtractor:
             logger.warning(f"Failed to initialize Gemini model: {e}")
             self.model = None
 
+    @traceable(name="vision-extract")
     def extract(
         self,
         image_bytes: bytes,
@@ -112,6 +119,7 @@ Return ONLY valid JSON matching the schema. If a field is not present in the doc
         # For now, return error indicating PDF needs conversion
         return {"error": "PDF page extraction requires image conversion"}
 
+    @traceable(name="vision-extract-text")
     def extract_text_based(
         self,
         text: str,
@@ -201,7 +209,12 @@ class LLMExtractor:
     def _initialize_model(self):
         """Initialize the Gemini model."""
         from src.utils.config import get_settings
+        from src.utils.observability import setup_langsmith_tracing
+
         settings = get_settings()
+
+        # Set up LangSmith tracing if not already done
+        setup_langsmith_tracing()
 
         if not settings.google_api_key:
             logger.warning("GOOGLE_API_KEY not configured")
@@ -215,6 +228,7 @@ class LLMExtractor:
             logger.warning(f"Failed to initialize Gemini model: {e}")
             self.model = None
 
+    @traceable(name="llm-extract")
     def extract(
         self,
         text: str,

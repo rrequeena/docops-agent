@@ -1658,7 +1658,8 @@
             try {
                 const response = await apiCall('/documents?page_size=500');
                 const docs = response.documents || [];
-                analysisDocsCache = docs.filter(d => d.status === 'processed');
+                // Show processed, rejected, and failed documents
+                analysisDocsCache = docs.filter(d => ['processed', 'rejected', 'failed'].includes(d.status));
                 renderAnalysisDocs(analysisDocsCache);
             } catch (error) {
                 container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
@@ -1954,6 +1955,7 @@ Total:</strong>                                    <strong> $${approval.context.
                 'analyzing': 'badge-warning',
                 'awaiting_approval': 'badge-purple',
                 'processed': 'badge-success',
+                'rejected': 'badge-danger',
                 'failed': 'badge-danger'
             };
             return `<span class="badge ${badges[status] || 'badge-gray'}">${status.toUpperCase()}</span>`;

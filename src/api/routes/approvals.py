@@ -225,9 +225,9 @@ async def reject_request(
         notes=request.notes,
     )
 
-    # If this was an anomaly review, mark the document as failed
+    # If this was an anomaly review, mark the document as rejected
     if approval.document_id:
-        await db.update_document_status(approval.document_id, DocumentStatus.FAILED)
+        await db.update_document_status(approval.document_id, DocumentStatus.REJECTED)
 
     return ApprovalActionResponse(
         approval_id=approval_id,

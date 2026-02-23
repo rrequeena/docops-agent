@@ -17,10 +17,19 @@ class Settings(BaseSettings):
     google_api_key: str = ""
     langchain_api_key: str = ""
 
-    # LangSmith
+    # LangSmith - use explicit env var names for compatibility
     langchain_tracing_v2: bool = False
     langsmith_api_key: str = ""
     langsmith_project: str = "docops-agent"
+
+    # Field aliases for compatibility
+    def __init__(self, **kwargs):
+        # Map legacy env vars
+        if "LANGCHAIN_TRACING_V2" in os.environ:
+            kwargs.setdefault("langchain_tracing_v2", os.environ["LANGCHAIN_TRACING_V2"].lower() == "true")
+        if "LANGCHAIN_API_KEY" in os.environ:
+            kwargs.setdefault("langsmith_api_key", os.environ["LANGCHAIN_API_KEY"])
+        super().__init__(**kwargs)
 
     # Database
     database_url: str = ""
@@ -50,6 +59,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 @lru_cache()

@@ -20,6 +20,7 @@ class DocumentStatus(PyEnum):
     ANALYZING = "analyzing"
     AWAITING_APPROVAL = "awaiting_approval"
     PROCESSED = "processed"
+    REJECTED = "rejected"
     FAILED = "failed"
 
 

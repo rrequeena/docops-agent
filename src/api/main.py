@@ -19,6 +19,14 @@ async def lifespan(app: FastAPI):
     """Application lifespan handler for startup/shutdown."""
     # Startup
     logger.info("Starting DocOps Agent API...")
+
+    # Set up LangSmith tracing
+    from src.utils.observability import setup_langsmith_tracing
+    if setup_langsmith_tracing():
+        logger.info("LangSmith tracing enabled")
+    else:
+        logger.info("LangSmith tracing not configured (missing LANGCHAIN_API_KEY or LANGCHAIN_TRACING_V2)")
+
     yield
     # Shutdown
     logger.info("Shutting down DocOps Agent API...")
