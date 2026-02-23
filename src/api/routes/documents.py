@@ -6,7 +6,7 @@ import os
 from typing import List, Optional
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Query, status, Depends
+from fastapi import APIRouter, HTTPException, UploadFile, File, Query, status, Depends, BackgroundTasks
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
@@ -347,20 +347,160 @@ async def delete_document(document_id: str) -> None:
         )
 
 
-@router.post("/{document_id}/process", response_model=StatusResponse, status_code=status.HTTP_202_ACCEPTED)
-async def process_document(document_id: str) -> StatusResponse:
+# Background processing function (must be defined before the endpoint)
+def process_document_background(document_id: str):
     """
-    Start document processing pipeline.
+    Background task to process a document.
+    This runs in a separate thread/process to avoid blocking the event loop.
     """
     import asyncio
-    from src.agents.ingestion.agent import IngestionAgent
-    from src.agents.extraction.agent import ExtractorAgent
+    import fitz
+    from uuid import UUID
     from src.agents.extraction.vision import LLMExtractor
-    from src.agents.state import AgentState, DocumentStatus
+    from src.agents.state import DocumentStatus
     from src.services.storage import StorageService
+    from src.services.database import DatabaseService
+    from src.utils.config import get_settings
 
+    settings = get_settings()
+
+    # Create new instances for this background task
+    db = DatabaseService(database_url=settings.database_url)
+    storage = StorageService(
+        endpoint=settings.minio_endpoint,
+        access_key=settings.minio_access_key,
+        secret_key=settings.minio_secret_key,
+        bucket=settings.minio_bucket
+    )
+
+    async def _run_processing():
+        document_uuid = str(document_id)
+
+        try:
+            # Get document
+            document = await db.get_document(document_uuid)
+            if not document:
+                logger.error(f"Document {document_id} not found")
+                return
+
+            # Update status to INGESTING
+            await db.update_document_status(document_uuid, DocumentStatus.INGESTING)
+
+            # Download file from storage
+            try:
+                file_bytes = storage.download_file(document.minio_key)
+            except Exception as e:
+                logger.error(f"Failed to download file: {e}")
+                await db.update_document_status(document_uuid, DocumentStatus.FAILED)
+                return
+
+            # Extract text using PyMuPDF
+            text_content = ""
+            try:
+                doc = fitz.open(stream=file_bytes, filetype="pdf")
+                for page in doc:
+                    text_content += page.get_text()
+                doc.close()
+            except Exception as e:
+                logger.warning(f"Could not extract text: {e}")
+                text_content = f"Could not extract text: {str(e)}"
+
+            doc_type = document.document_type.value if document.document_type else "invoice"
+
+            # Update status to EXTRACTING
+            await db.update_document_status(document_uuid, DocumentStatus.EXTRACTING)
+
+            # Run extraction
+            try:
+                llm_extractor = LLMExtractor()
+                extracted_data = llm_extractor.extract(text_content, doc_type)
+
+                if "error" in extracted_data:
+                    logger.warning(f"LLM extraction failed: {extracted_data.get('error')}")
+                    # Use sample data for demo
+                    extracted_data = {
+                        "vendor_name": "Sample Vendor",
+                        "invoice_number": f"INV-{document_id[:8]}",
+                        "total": 1000.00,
+                        "date": "2026-01-15",
+                        "line_items": [
+                            {"description": "Service 1", "quantity": 1, "unit_price": 500.00, "total": 500.00},
+                            {"description": "Service 2", "quantity": 2, "unit_price": 250.00, "total": 500.00}
+                        ]
+                    }
+
+                # Get confidence threshold
+                confidence_threshold = 0.7
+                try:
+                    threshold = await db.get_setting("confidence_threshold", "0.7")
+                    confidence_threshold = float(threshold)
+                except:
+                    pass
+
+                confidence = 0.9 if extracted_data and not extracted_data.get("error") else 0.4
+
+                # Determine confidence level
+                from src.models.extraction import ConfidenceLevel
+                conf_level = ConfidenceLevel.HIGH if confidence >= confidence_threshold else ConfidenceLevel.MEDIUM
+
+                # Save extraction
+                await db.create_extraction(
+                    document_id=document_uuid,
+                    extraction_type=doc_type,
+                    confidence=confidence,
+                    confidence_level=conf_level,
+                    data=extracted_data
+                )
+
+            except Exception as e:
+                logger.error(f"Extraction failed: {e}")
+                await db.update_document_status(document_uuid, DocumentStatus.FAILED)
+                return
+
+            # Update status to ANALYZING
+            await db.update_document_status(document_uuid, DocumentStatus.ANALYZING)
+
+            # Run anomaly detection
+            try:
+                from src.agents.analyst.anomaly import detect_price_spikes, detect_duplicates, detect_tax_anomalies
+
+                anomalies = []
+                price_spikes = detect_price_spikes([extracted_data], threshold_percent=50.0)
+                anomalies.extend([a.to_dict() for a in price_spikes])
+
+                duplicates = detect_duplicates([extracted_data])
+                anomalies.extend([a.to_dict() for a in duplicates])
+
+                tax_anomalies = detect_tax_anomalies([extracted_data])
+                anomalies.extend([a.to_dict() for a in tax_anomalies])
+
+                logger.info(f"Analysis complete. Found {len(anomalies)} anomalies")
+
+            except Exception as e:
+                logger.warning(f"Analysis failed: {e}")
+
+            # Mark as processed
+            await db.update_document_status(document_uuid, DocumentStatus.PROCESSED)
+            logger.info(f"Document {document_id} processed successfully")
+
+        except Exception as e:
+            logger.error(f"Processing failed for document {document_id}: {e}")
+            try:
+                await db.update_document_status(document_uuid, DocumentStatus.FAILED)
+            except:
+                pass
+
+    # Run the async function
+    asyncio.run(_run_processing())
+
+
+@router.post("/{document_id}/process", response_model=StatusResponse, status_code=status.HTTP_202_ACCEPTED)
+async def process_document(document_id: str, background_tasks: BackgroundTasks) -> StatusResponse:
+    """
+    Start document processing pipeline in the background.
+    Returns immediately while processing continues asynchronously.
+    """
     db = get_database_service()
-    storage = get_storage_service()
 
     try:
         document_uuid = UUID(document_id)
@@ -378,151 +518,23 @@ async def process_document(document_id: str) -> StatusResponse:
                 detail="Document not found"
             )
 
-        # Update status to processing
+        # Check if already processing
+        if document.status in [DocumentStatus.INGESTING, DocumentStatus.EXTRACTING, DocumentStatus.ANALYZING]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Document is already being processed (status: {document.status.value})"
+            )
+
+        # Update status to indicate processing has started
         await db.update_document_status(str(document_uuid), DocumentStatus.INGESTING)
 
-        # Download file from storage
-        try:
-            file_bytes = storage.download_file(document.minio_key)
-        except Exception as e:
-            await db.update_document_status(str(document_uuid), DocumentStatus.FAILED)
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Failed to download file: {str(e)}"
-            )
-
-        # Run ingestion agent
-        try:
-            ingestion_agent = IngestionAgent()
-            state = AgentState(
-                current_document_id=str(document_uuid),
-                documents=[],
-                ingestion_results={},
-                extraction_results={},
-                analysis_results={},
-                errors=[]
-            )
-
-            # Create a simple ingestion result for now
-            import fitz  # PyMuPDF
-            import io
-
-            text_content = ""
-            try:
-                doc = fitz.open(stream=file_bytes, filetype="pdf")
-                for page in doc:
-                    text_content += page.get_text()
-                doc.close()
-            except Exception as e:
-                text_content = f"Could not extract text: str(e)"
-
-            ingestion_result = {
-                "document_id": str(document_uuid),
-                "document_type": document.document_type.value if document.document_type else "invoice",
-                "content": text_content,
-                "images": [],
-                "metadata": {}
-            }
-
-            state["ingestion_results"][str(document_uuid)] = ingestion_result
-            await db.update_document_status(str(document_uuid), DocumentStatus.EXTRACTING)
-
-        except Exception as e:
-            await db.update_document_status(str(document_uuid), DocumentStatus.FAILED)
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Ingestion failed: {str(e)}"
-            )
-
-        # Run extraction agent
-        try:
-            llm_extractor = LLMExtractor()
-            doc_type = ingestion_result.get("document_type", "invoice")
-
-            extracted_data = llm_extractor.extract(text_content, doc_type)
-
-            if "error" in extracted_data:
-                # If extraction failed, create a sample result for demo
-                logger.warning(f"LLM extraction failed: {extracted_data.get('error')}")
-                extracted_data = {
-                    "vendor_name": "Sample Vendor",
-                    "invoice_number": f"INV-{document_id[:8]}",
-                    "total": 1000.00,
-                    "date": "2026-01-15",
-                    "line_items": [
-                        {"description": "Service 1", "quantity": 1, "unit_price": 500.00, "total": 500.00},
-                        {"description": "Service 2", "quantity": 2, "unit_price": 250.00, "total": 500.00}
-                    ]
-                }
-
-            # Save extraction to database
-            from src.models.extraction import ConfidenceLevel
-
-            # Get confidence threshold from database (default 0.7)
-            try:
-                db_service = get_database_service()
-                confidence_threshold = await db_service.get_setting("confidence_threshold", "0.7")
-                confidence_threshold = float(confidence_threshold)
-            except:
-                confidence_threshold = 0.7
-
-            # Calculate confidence - in real implementation this comes from LLM
-            # For now, we set it based on whether extraction has data
-            confidence = 0.9 if extracted_data and not extracted_data.get("error") else 0.4
-
-            # Determine confidence level based on threshold
-            conf_level = ConfidenceLevel.HIGH if confidence >= confidence_threshold else ConfidenceLevel.MEDIUM
-
-            extraction = await db.create_extraction(
-                document_id=str(document_uuid),
-                extraction_type=doc_type,
-                confidence=confidence,
-                confidence_level=conf_level,
-                data=extracted_data
-            )
-
-            # Run analyst agent for anomaly detection
-            await db.update_document_status(str(document_uuid), DocumentStatus.ANALYZING)
-
-            try:
-                from src.agents.analyst.anomaly import detect_price_spikes, detect_duplicates, detect_tax_anomalies
-                from src.agents.analyst.comparison import compare_invoices
-
-                # Run anomaly detection
-                anomalies = []
-
-                # Price spike detection
-                price_spikes = detect_price_spikes([extracted_data], threshold_percent=50.0)
-                anomalies.extend([a.to_dict() for a in price_spikes])
-
-                # Duplicate detection
-                duplicates = detect_duplicates([extracted_data])
-                anomalies.extend([a.to_dict() for a in duplicates])
-
-                # Tax anomaly detection
-                tax_anomalies = detect_tax_anomalies([extracted_data])
-                anomalies.extend([a.to_dict() for a in tax_anomalies])
-
-                logger.info(f"Analysis complete. Found {len(anomalies)} anomalies")
-
-            except Exception as e:
-                logger.warning(f"Analysis failed: {e}")
-                anomalies = []
-
-        except Exception as e:
-            await db.update_document_status(str(document_uuid), DocumentStatus.FAILED)
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Extraction failed: {str(e)}"
-            )
-
-        # Mark as processed
-        await db.update_document_status(str(document_uuid), DocumentStatus.PROCESSED)
+        # Add processing to background tasks
+        background_tasks.add_task(process_document_background, str(document_uuid))
 
         return StatusResponse(
             document_id=document_id,
-            status="processed",
-            message="Document processed successfully"
+            status="processing",
+            message="Document processing started in background"
         )
 
     except HTTPException:
@@ -534,7 +546,7 @@ async def process_document(document_id: str) -> StatusResponse:
             pass
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Processing failed: {str(e)}"
+            detail=f"Failed to start processing: {str(e)}"
         )
 
 

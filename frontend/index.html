@@ -1548,8 +1548,43 @@
         async function processDocument(id) {
             try {
                 await apiCall(`/documents/${id}/process`, { method: 'POST' });
-                alert('Document processing started');
-                await loadDocuments();
+
+                // Poll for status updates until processing is complete
+                const maxAttempts = 60; // 60 seconds max
+                let attempts = 0;
+
+                const pollStatus = async () => {
+                    if (attempts >= maxAttempts) {
+                        console.log('Polling timed out');
+                        await loadDocuments();
+                        return;
+                    }
+
+                    attempts++;
+                    try {
+                        const response = await apiCall(`/documents/${id}/status`);
+                        const status = response.status;
+
+                        // Update the UI with current status
+                        await loadDocuments();
+
+                        // Continue polling if still processing
+                        if (status === 'ingesting' || status === 'extracting' || status === 'analyzing') {
+                            setTimeout(pollStatus, 1000);
+                        } else if (status === 'processed') {
+                            console.log('Processing complete');
+                        } else if (status === 'failed') {
+                            console.log('Processing failed');
+                        }
+                    } catch (e) {
+                        console.error('Status check failed:', e);
+                        setTimeout(pollStatus, 2000);
+                    }
+                };
+
+                // Start polling
+                setTimeout(pollStatus, 500);
+
             } catch (error) {
                 alert('Processing failed: ' + error.message);
             }
