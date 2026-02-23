@@ -66,9 +66,14 @@ async def get_analysis_by_document(document_id: str) -> AnalysisResponse:
         extraction = await db.get_document_extraction(document_id)
 
         if not extraction:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="No extraction found for this document"
+            # Return empty response instead of 404
+            return AnalysisResponse(
+                id="",
+                analysis_type="anomaly_detection",
+                summary="No extraction data available",
+                anomalies=[],
+                metrics={},
+                generated_at=datetime.utcnow()
             )
 
         extracted_data = extraction.data

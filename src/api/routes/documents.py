@@ -351,185 +351,91 @@ async def delete_document(document_id: str) -> None:
 # Background processing function (must be defined before the endpoint)
 def process_document_background(document_id: str):
     """
-    Background task to process a document.
+    Background task to process a document using LangGraph workflow.
     This runs in a separate thread/process to avoid blocking the event loop.
     """
-    import asyncio
-    import fitz
-    from uuid import UUID
-    from src.agents.extraction.vision import LLMExtractor
+    from src.agents.workflow import run_document_workflow
     from src.agents.state import DocumentStatus
-    from src.services.storage import StorageService
     from src.services.database import DatabaseService
     from src.utils.config import get_settings
+    from src.models.approval import RequestType
 
     settings = get_settings()
-
-    # Create new instances for this background task
     db = DatabaseService(database_url=settings.database_url)
-    storage = StorageService(
-        endpoint=settings.minio_endpoint,
-        access_key=settings.minio_access_key,
-        secret_key=settings.minio_secret_key,
-        bucket=settings.minio_bucket
-    )
 
-    async def _run_processing():
+    try:
+        final_state = run_document_workflow(document_id)
+
         document_uuid = str(document_id)
+        final_status = final_state.get("document_status", DocumentStatus.FAILED)
+        approval_context = final_state.get("approval_context", {})
+        extraction_results = final_state.get("extraction_results", {})
+        analysis_results = final_state.get("analysis_results")
 
-        try:
-            # Get document
-            document = await db.get_document(document_uuid)
-            if not document:
-                logger.error(f"Document {document_id} not found")
-                return
+        import asyncio
 
-            # Update status to INGESTING
-            await db.update_document_status(document_uuid, DocumentStatus.INGESTING)
+        async def _save_results():
+            await db.update_document_status(document_uuid, final_status)
 
-            # Download file from storage
-            try:
-                file_bytes = storage.download_file(document.minio_key)
-            except Exception as e:
-                logger.error(f"Failed to download file: {e}")
-                await db.update_document_status(document_uuid, DocumentStatus.FAILED)
-                return
+            if final_status == DocumentStatus.AWAITING_APPROVAL and approval_context.get("needs_approval"):
+                reasons = approval_context.get("reasons", [])
+                anomaly_list = analysis_results.get("anomalies", []) if analysis_results else []
 
-            # Extract text using PyMuPDF
-            text_content = ""
-            try:
-                doc = fitz.open(stream=file_bytes, filetype="pdf")
-                for page in doc:
-                    text_content += page.get_text()
-                doc.close()
-            except Exception as e:
-                logger.warning(f"Could not extract text: {e}")
-                text_content = f"Could not extract text: {str(e)}"
+                extracted_data = {}
+                confidence = 0.0
+                if extraction_results:
+                    ext_result = extraction_results.get(document_id, {})
+                    extracted_data = ext_result.get("data", {})
+                    confidence = ext_result.get("confidence", 0.0)
 
-            doc_type = document.document_type.value if document.document_type else "invoice"
-
-            # Update status to EXTRACTING
-            await db.update_document_status(document_uuid, DocumentStatus.EXTRACTING)
-
-            # Run extraction
-            try:
-                llm_extractor = LLMExtractor()
-                extracted_data = llm_extractor.extract(text_content, doc_type)
-
-                if "error" in extracted_data:
-                    logger.warning(f"LLM extraction failed: {extracted_data.get('error')}")
-                    # Use sample data for demo
-                    extracted_data = {
-                        "vendor_name": "Sample Vendor",
-                        "invoice_number": f"INV-{document_id[:8]}",
-                        "total": 1000.00,
-                        "date": "2026-01-15",
-                        "line_items": [
-                            {"description": "Service 1", "quantity": 1, "unit_price": 500.00, "total": 500.00},
-                            {"description": "Service 2", "quantity": 2, "unit_price": 250.00, "total": 500.00}
-                        ]
-                    }
-
-                # Get confidence threshold
-                confidence_threshold = 0.7
-                try:
-                    threshold = await db.get_setting("confidence_threshold", "0.7")
-                    confidence_threshold = float(threshold)
-                except:
-                    pass
-
-                confidence = 0.9 if extracted_data and not extracted_data.get("error") else 0.4
-
-                # Determine confidence level
                 from src.models.extraction import ConfidenceLevel
-                conf_level = ConfidenceLevel.HIGH if confidence >= confidence_threshold else ConfidenceLevel.MEDIUM
+                conf_level = ConfidenceLevel.HIGH if confidence >= 0.7 else ConfidenceLevel.MEDIUM
 
-                # Save extraction
                 await db.create_extraction(
                     document_id=document_uuid,
-                    extraction_type=doc_type,
+                    extraction_type="invoice",
                     confidence=confidence,
                     confidence_level=conf_level,
                     data=extracted_data
                 )
 
-            except Exception as e:
-                logger.error(f"Extraction failed: {e}")
-                await db.update_document_status(document_uuid, DocumentStatus.FAILED)
-                return
+                await db.create_approval(
+                    document_id=document_uuid,
+                    request_type=RequestType.ANOMALY_REVIEW,
+                    context={
+                        "anomalies": anomaly_list,
+                        "vendor": extracted_data.get("vendor_name"),
+                        "total": extracted_data.get("total"),
+                        "confidence": confidence,
+                        "reason": ", ".join(reasons) if reasons else "Review required"
+                    }
+                )
 
-            # Update status to ANALYZING
-            await db.update_document_status(document_uuid, DocumentStatus.ANALYZING)
+            elif final_status == DocumentStatus.PROCESSED:
+                extracted_data = {}
+                confidence = 0.0
+                if extraction_results:
+                    ext_result = extraction_results.get(document_id, {})
+                    extracted_data = ext_result.get("data", {})
+                    confidence = ext_result.get("confidence", 0.0)
 
-            # Run anomaly detection
-            try:
-                from src.agents.analyst.anomaly import detect_price_spikes, detect_duplicate_charges, detect_tax_anomalies
+                from src.models.extraction import ConfidenceLevel
+                conf_level = ConfidenceLevel.HIGH if confidence >= 0.7 else ConfidenceLevel.MEDIUM
 
-                # Get all extractions for comparison (includes current invoice)
-                all_extractions = await db.list_all_extractions()
+                await db.create_extraction(
+                    document_id=document_uuid,
+                    extraction_type="invoice",
+                    confidence=confidence,
+                    confidence_level=conf_level,
+                    data=extracted_data
+                )
 
-                # Build list of all invoice data for comparison
-                all_invoices = []
-                for ext in all_extractions:
-                    if ext.data and isinstance(ext.data, dict):
-                        # Skip if this is the current document (already in the list)
-                        if ext.document_id != document_uuid:
-                            all_invoices.append(ext.data)
-                        else:
-                            # Use the current extraction data
-                            all_invoices.append(extracted_data)
+        asyncio.run(_save_results())
 
-                anomalies = []
-
-                # Run price spike detection on ALL invoices from same vendor
-                if len(all_invoices) >= 2:
-                    price_spikes = detect_price_spikes(all_invoices, threshold_percent=50.0)
-                    anomalies.extend([a.to_dict() for a in price_spikes])
-
-                # Run duplicate detection on all invoices
-                duplicates = detect_duplicate_charges(all_invoices)
-                anomalies.extend([a.to_dict() for a in duplicates])
-
-                # Run tax anomaly detection
-                tax_anomalies = detect_tax_anomalies(all_invoices)
-                anomalies.extend([a.to_dict() for a in tax_anomalies])
-
-                logger.info(f"Analysis complete. Found {len(anomalies)} anomalies")
-
-                # If anomalies detected, require approval
-                if anomalies and len(anomalies) > 0:
-                    await db.update_document_status(document_uuid, DocumentStatus.AWAITING_APPROVAL)
-
-                    # Create approval request
-                    await db.create_approval(
-                        document_id=document_uuid,
-                        request_type=RequestType.ANOMALY_REVIEW,
-                        context={
-                            "anomalies": anomalies,
-                            "vendor": extracted_data.get("vendor_name"),
-                            "total": extracted_data.get("total"),
-                            "reason": f"Found {len(anomalies)} anomaly/anomalies requiring review"
-                        }
-                    )
-                    logger.info(f"Document {document_id} requires approval due to {len(anomalies)} anomalies")
-                else:
-                    # No anomalies, mark as processed
-                    await db.update_document_status(document_uuid, DocumentStatus.PROCESSED)
-                    logger.info(f"Document {document_id} processed successfully")
-
-            except Exception as e:
-                logger.warning(f"Analysis failed: {e}")
-                await db.update_document_status(document_uuid, DocumentStatus.PROCESSED)
-
-        except Exception as e:
-            logger.error(f"Processing failed for document {document_id}: {e}")
-            try:
-                await db.update_document_status(document_uuid, DocumentStatus.FAILED)
-            except:
-                pass
-
-    # Run the async function
-    asyncio.run(_run_processing())
+    except Exception as e:
+        logger.error(f"Processing failed for document {document_id}: {e}")
+        import asyncio
+        asyncio.run(db.update_document_status(str(document_id), DocumentStatus.FAILED))
 
 
 @router.post("/{document_id}/process", response_model=StatusResponse, status_code=status.HTTP_202_ACCEPTED)
