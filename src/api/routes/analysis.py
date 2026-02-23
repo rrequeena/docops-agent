@@ -84,20 +84,35 @@ async def get_analysis_by_document(document_id: str) -> AnalysisResponse:
                 detect_unusual_patterns,
             )
 
-            # Price spike detection
-            price_spikes = detect_price_spikes([extracted_data], threshold_percent=50.0)
-            anomalies.extend([a.to_dict() for a in price_spikes])
+            # Get all extractions for comparison (includes current invoice)
+            all_extractions = await db.list_all_extractions()
+
+            # Build list of all invoice data for comparison
+            all_invoices = []
+            for ext in all_extractions:
+                if ext.data and isinstance(ext.data, dict):
+                    # Skip if this is the current document (already in the list)
+                    if ext.document_id != document_id:
+                        all_invoices.append(ext.data)
+                    else:
+                        # Use the current extraction data
+                        all_invoices.append(extracted_data)
+
+            # Price spike detection - needs all invoices to compare
+            if len(all_invoices) >= 2:
+                price_spikes = detect_price_spikes(all_invoices, threshold_percent=50.0)
+                anomalies.extend([a.to_dict() for a in price_spikes])
 
             # Duplicate detection
-            duplicates = detect_duplicate_charges([extracted_data])
+            duplicates = detect_duplicate_charges(all_invoices)
             anomalies.extend([a.to_dict() for a in duplicates])
 
             # Tax anomaly detection
-            tax_anomalies = detect_tax_anomalies([extracted_data])
+            tax_anomalies = detect_tax_anomalies(all_invoices)
             anomalies.extend([a.to_dict() for a in tax_anomalies])
 
             # Unusual patterns
-            patterns = detect_unusual_patterns([extracted_data])
+            patterns = detect_unusual_patterns(all_invoices)
             anomalies.extend([a.to_dict() for a in patterns])
 
             logger.info(f"Analysis complete for document {document_id}. Found {len(anomalies)} anomalies")

@@ -175,6 +175,13 @@ class DatabaseService:
             result = await session.execute(query)
             return result.scalar_one_or_none()
 
+    async def list_all_extractions(self) -> list[Extraction]:
+        """List all extractions (for anomaly detection)."""
+        async with self.async_session() as session:
+            query = select(Extraction).order_by(Extraction.created_at.desc())
+            result = await session.execute(query)
+            return list(result.scalars().all())
+
     # Approval operations
     async def create_approval(
         self,

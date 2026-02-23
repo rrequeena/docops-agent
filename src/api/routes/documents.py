@@ -462,16 +462,35 @@ def process_document_background(document_id: str):
 
             # Run anomaly detection
             try:
-                from src.agents.analyst.anomaly import detect_price_spikes, detect_duplicates, detect_tax_anomalies
+                from src.agents.analyst.anomaly import detect_price_spikes, detect_duplicate_charges, detect_tax_anomalies
+
+                # Get all extractions for comparison (includes current invoice)
+                all_extractions = await db.list_all_extractions()
+
+                # Build list of all invoice data for comparison
+                all_invoices = []
+                for ext in all_extractions:
+                    if ext.data and isinstance(ext.data, dict):
+                        # Skip if this is the current document (already in the list)
+                        if ext.document_id != document_uuid:
+                            all_invoices.append(ext.data)
+                        else:
+                            # Use the current extraction data
+                            all_invoices.append(extracted_data)
 
                 anomalies = []
-                price_spikes = detect_price_spikes([extracted_data], threshold_percent=50.0)
-                anomalies.extend([a.to_dict() for a in price_spikes])
 
-                duplicates = detect_duplicates([extracted_data])
+                # Run price spike detection on ALL invoices from same vendor
+                if len(all_invoices) >= 2:
+                    price_spikes = detect_price_spikes(all_invoices, threshold_percent=50.0)
+                    anomalies.extend([a.to_dict() for a in price_spikes])
+
+                # Run duplicate detection on all invoices
+                duplicates = detect_duplicate_charges(all_invoices)
                 anomalies.extend([a.to_dict() for a in duplicates])
 
-                tax_anomalies = detect_tax_anomalies([extracted_data])
+                # Run tax anomaly detection
+                tax_anomalies = detect_tax_anomalies(all_invoices)
                 anomalies.extend([a.to_dict() for a in tax_anomalies])
 
                 logger.info(f"Analysis complete. Found {len(anomalies)} anomalies")

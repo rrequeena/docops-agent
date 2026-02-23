@@ -1752,12 +1752,26 @@
                 const anomaliesList = document.getElementById('anomalies-list');
                 const anomalyCount = document.getElementById('anomaly-count');
 
-                if (extraction && extraction.warnings && extraction.warnings.length > 0) {
-                    anomaliesList.innerHTML = extraction.warnings.map(w => `
-                        <div class="anomaly-item"><div class="anomaly-type">WARNING</div><div class="anomaly-message">${w}</div></div>
-                    `).join('');
-                    anomalyCount.textContent = extraction.warnings.length;
-                } else {
+                // Fetch analysis to get anomalies
+                try {
+                    const analysis = await apiCall(`/analysis/document/${docId}`);
+                    if (analysis && analysis.anomalies && analysis.anomalies.length > 0) {
+                        anomaliesList.innerHTML = analysis.anomalies.map(a => `
+                            <div class="anomaly-item">
+                                <div class="anomaly-type">${a.anomaly_type.toUpperCase()}</div>
+                                <div class="anomaly-message">${a.description}</div>
+                                <div class="anomaly-message" style="margin-top: 0.25rem; font-size: 0.75rem;">
+                                    ${a.recommendation || ''}
+                                </div>
+                            </div>
+                        `).join('');
+                        anomalyCount.textContent = analysis.anomalies.length;
+                    } else {
+                        anomaliesList.innerHTML = '<div class="empty-state"><p>No anomalies detected</p></div>';
+                        anomalyCount.textContent = '0';
+                    }
+                } catch (e) {
+                    console.error('Error fetching analysis:', e);
                     anomaliesList.innerHTML = '<div class="empty-state"><p>No anomalies detected</p></div>';
                     anomalyCount.textContent = '0';
                 }
