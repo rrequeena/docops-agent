@@ -1361,6 +1361,10 @@
                 const error = await response.json().catch(() => ({ detail: 'Request failed' }));
                 throw new Error(error.detail || 'Request failed');
             }
+            // Handle 204 No Content (empty response)
+            if (response.status === 204) {
+                return null;
+            }
             return response.json();
         }
 
