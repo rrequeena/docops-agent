@@ -15,6 +15,7 @@ from src.services.storage import StorageService
 from src.services.database import DatabaseService
 from src.utils.config import get_settings
 from src.models.document import DocumentStatus
+from src.models.approval import RequestType
 
 
 router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
@@ -495,12 +496,30 @@ def process_document_background(document_id: str):
 
                 logger.info(f"Analysis complete. Found {len(anomalies)} anomalies")
 
+                # If anomalies detected, require approval
+                if anomalies and len(anomalies) > 0:
+                    await db.update_document_status(document_uuid, DocumentStatus.AWAITING_APPROVAL)
+
+                    # Create approval request
+                    await db.create_approval(
+                        document_id=document_uuid,
+                        request_type=RequestType.ANOMALY_REVIEW,
+                        context={
+                            "anomalies": anomalies,
+                            "vendor": extracted_data.get("vendor_name"),
+                            "total": extracted_data.get("total"),
+                            "reason": f"Found {len(anomalies)} anomaly/anomalies requiring review"
+                        }
+                    )
+                    logger.info(f"Document {document_id} requires approval due to {len(anomalies)} anomalies")
+                else:
+                    # No anomalies, mark as processed
+                    await db.update_document_status(document_uuid, DocumentStatus.PROCESSED)
+                    logger.info(f"Document {document_id} processed successfully")
+
             except Exception as e:
                 logger.warning(f"Analysis failed: {e}")
-
-            # Mark as processed
-            await db.update_document_status(document_uuid, DocumentStatus.PROCESSED)
-            logger.info(f"Document {document_id} processed successfully")
+                await db.update_document_status(document_uuid, DocumentStatus.PROCESSED)
 
         except Exception as e:
             logger.error(f"Processing failed for document {document_id}: {e}")

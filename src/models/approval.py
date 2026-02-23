@@ -22,6 +22,7 @@ class RequestType(PyEnum):
     PROCESSING_APPROVAL = "processing_approval"
     EXTRACTION_APPROVAL = "extraction_approval"
     ACTION_APPROVAL = "action_approval"
+    ANOMALY_REVIEW = "anomaly_review"
 
 
 class Approval(Base):

@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.services.database import DatabaseService
 from src.models.approval import ApprovalStatus, RequestType
+from src.models.document import DocumentStatus
 from src.utils.config import get_settings
 
 
@@ -182,6 +183,10 @@ async def approve_request(
         notes=request.notes,
     )
 
+    # If this was an anomaly review, update the document status to processed
+    if approval.document_id:
+        await db.update_document_status(approval.document_id, DocumentStatus.PROCESSED)
+
     return ApprovalActionResponse(
         approval_id=approval_id,
         status="approved",
@@ -219,6 +224,10 @@ async def reject_request(
         status=ApprovalStatus.REJECTED,
         notes=request.notes,
     )
+
+    # If this was an anomaly review, mark the document as failed
+    if approval.document_id:
+        await db.update_document_status(approval.document_id, DocumentStatus.FAILED)
 
     return ApprovalActionResponse(
         approval_id=approval_id,

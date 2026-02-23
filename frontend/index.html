@@ -764,9 +764,10 @@
         .doc-select-row {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1rem;
+            padding: 0.6rem 1rem;
             border-bottom: 2px solid var(--border-subtle);
             cursor: pointer;
+            gap: 0.5rem;
             transition: all 0.15s ease;
         }
 
@@ -1040,13 +1041,7 @@
                         <span class="nav-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                         </span>
-                        Upload Files
-                    </div>
-                    <div class="nav-item" data-page="documents">
-                        <span class="nav-icon">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                        </span>
-                        Documents
+                        Upload
                     </div>
                 </div>
                 <div class="nav-section">
@@ -1126,7 +1121,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">RECENT DOCUMENTS</h3>
-                            <button class="btn btn-secondary btn-sm" onclick="showPage('documents')">View All</button>
+                            <button class="btn btn-secondary btn-sm" onclick="showPage('analysis')">View All</button>
                         </div>
                         <div class="card-body">
                             <div id="recent-docs">
@@ -1176,12 +1171,19 @@
                             </div>
 
                             <div id="upload-result" style="display: none; margin-top: 1.5rem;"></div>
+
+                            <div class="flex items-center gap-3" style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                                <label class="checkbox-label flex items-center gap-2" style="cursor: pointer;">
+                                    <input type="checkbox" id="auto-process-checkbox" checked style="width: 18px; height: 18px; accent-color: var(--accent-primary);">
+                                    <span style="color: var(--text-primary); font-weight: 500;">Automatically process and analyze after upload</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Documents Page -->
-                <section id="documents-page" class="page">
+                <!-- Documents Page (Hidden - merged into Analysis) -->
+                <section id="documents-page" class="page" style="display: none;">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">ALL DOCUMENTS</h3>
@@ -1205,8 +1207,12 @@
                 <section id="analysis-page" class="page">
                     <div class="card mb-3">
                         <div class="card-header">
-                            <h3 class="card-title">PROCESSED DOCUMENTS</h3>
+                            <h3 class="card-title">DOCUMENTS & ANALYSIS</h3>
                             <div class="flex items-center gap-2">
+                                <button class="btn btn-primary btn-sm" onclick="showPage('upload')">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                    Upload New
+                                </button>
                                 <div class="search-box">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                     <input type="text" class="search-input" id="analysis-search" placeholder="Search..." oninput="filterAnalysisDocs()">
@@ -1401,7 +1407,7 @@
                                 </thead>
                                 <tbody>
                                     ${recentDocs.map(doc => `
-                                        <tr>
+                                        <tr onclick="viewDocFromDashboard('${doc.id}')" style="cursor: pointer;">
                                             <td style="color: var(--text-primary); font-weight: 500;">${doc.filename}</td>
                                             <td>${getStatusBadge(doc.status)}</td>
                                             <td>${doc.document_type || '-'}</td>
@@ -1489,7 +1495,32 @@
                 }
             }
 
-            resultDiv.innerHTML = `<div class="alert alert-success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Successfully uploaded ${files.length} document(s)</div>`;
+            const autoProcess = document.getElementById('auto-process-checkbox')?.checked;
+
+            if (autoProcess) {
+                // Get the uploaded document IDs and process them
+                try {
+                    const docsResponse = await apiCall('/documents?page_size=10');
+                    const docs = docsResponse.documents || [];
+
+                    // Process the most recent uploads
+                    for (let i = 0; i < Math.min(files.length, docs.length); i++) {
+                        const doc = docs[i];
+                        if (doc.status === 'uploaded') {
+                            try {
+                                await apiCall(`/documents/${doc.id}/process`, { method: 'POST' });
+                            } catch (e) {
+                                console.error('Auto-process failed:', e);
+                            }
+                        }
+                    }
+                    resultDiv.innerHTML = `<div class="alert alert-success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Successfully uploaded ${files.length} document(s) and started processing</div>`;
+                } catch (e) {
+                    resultDiv.innerHTML = `<div class="alert alert-success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Successfully uploaded ${files.length} document(s)</div>`;
+                }
+            } else {
+                resultDiv.innerHTML = `<div class="alert alert-success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Successfully uploaded ${files.length} document(s)</div>`;
+            }
             resultDiv.style.display = 'block';
             loadDashboard();
         }
@@ -1604,6 +1635,19 @@
             }
         }
 
+        async function deleteDocumentFromAnalysis(id) {
+            if (!confirm('Are you sure you want to delete this document?')) return;
+            try {
+                await apiCall(`/documents/${id}`, { method: 'DELETE' });
+                // Hide the detail view and reload analysis
+                document.getElementById('analysis-result').style.display = 'none';
+                await loadAnalysisDocs();
+                await loadDashboard();
+            } catch (error) {
+                alert('Delete failed: ' + error.message);
+            }
+        }
+
         // Analysis
         let analysisDocsCache = [];
 
@@ -1645,13 +1689,14 @@
                 return `
                     <div class="doc-select-row" onclick="selectAnalysisDoc('${doc.id}')" data-doc-id="${doc.id}">
                         <div class="doc-select-icon">PDF</div>
-                        <div class="doc-select-info">
+                        <div class="doc-select-info" style="flex: 1;">
                             <div class="doc-select-name">${doc.filename}</div>
                             <div class="doc-select-meta">
                                 ${hasExtraction ? `Vendor: ${ext.data.vendor_name || 'N/A'} | Total: $${ext.data.total || '0.00'}` : 'No extraction data'}
                             </div>
                         </div>
-                        ${hasExtraction ? `<span class="badge badge-${confLevel === 'high' ? 'success' : confLevel === 'medium' ? 'warning' : 'danger'}">${confLevel.toUpperCase()}</span>` : ''}
+                        ${hasExtraction ? `<span class="badge badge-${confLevel === 'high' ? 'success' : confLevel === 'medium' ? 'warning' : 'danger'}" style="margin-right: 0.5rem;">${confLevel.toUpperCase()}</span>` : ''}
+                        <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; white-space: nowrap;" onclick="event.stopPropagation(); deleteDocumentFromAnalysis('${doc.id}')">Delete</button>
                     </div>
                 `;
             }).join('');
@@ -1806,15 +1851,31 @@
                     <div class="approval-card">
                         <div class="approval-header">
                             <div>
-                                <div class="approval-type">${approval.request_type || 'Review'}</div>
-                                <div class="approval-doc">Document ID: ${approval.document_id}</div>
+                                <div class="approval-type" style="color: var(--accent-danger);">⚠️ ANOMALY DETECTED</div>
+                                <div class="approval-doc">Document: ${approval.document_id.substring(0, 8)}...</div>
                             </div>
                             <div class="approval-actions">
                                 <button class="btn btn-success btn-sm" onclick="approveRequest('${approval.id}')">Approve</button>
                                 <button class="btn btn-danger btn-sm" onclick="rejectRequest('${approval.id}')">Reject</button>
                             </div>
                         </div>
-                        ${approval.context ? `<p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">${JSON.stringify(approval.context)}</p>` : ''}
+                        ${approval.context ? `
+                            <div style="margin-top: 0.75rem; padding: 0.75rem; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    <strong>Vendor:</strong> ${approval.context.vendor || 'N/A'} |
+Total:</strong>                                    <strong> $${approval.context.total || '0.00'}
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--accent-danger); margin-top: 0.5rem;">
+                                    ${approval.context.reason || ''}
+                                </div>
+                                ${approval.context.anomalies && approval.context.anomalies.length > 0 ? `
+                                    <div style="margin-top: 0.5rem; font-size: 0.75rem;">
+                                        ${approval.context.anomalies.map(a => `<span style="display: inline-block; background: rgba(248,113,113,0.2); color: var(--accent-danger); padding: 0.125rem 0.5rem; border-radius: 2px; margin-right: 0.25rem; margin-top: 0.25rem;">${a.anomaly_type}</span>`).join('')}
+                                    </div>
+                                ` : ''}
+                                <button class="btn btn-secondary btn-sm" style="margin-top: 0.75rem; font-size: 0.7rem;" onclick="viewDocFromApproval('${approval.document_id}')">View Details in Analysis</button>
+                            </div>
+                        ` : ''}
                     </div>
                 `).join('');
             } catch (error) {
@@ -1824,16 +1885,32 @@
 
         async function approveRequest(id) {
             try {
-                await apiCall(`/approvals/${id}/respond`, { method: 'POST', body: JSON.stringify({ status: 'approved' }) });
+                await apiCall(`/approvals/${id}/approve`, { method: 'POST' });
                 await loadApprovals();
+                await loadDashboard();
             } catch (error) { alert('Failed: ' + error.message); }
         }
 
         async function rejectRequest(id) {
             try {
-                await apiCall(`/approvals/${id}/respond`, { method: 'POST', body: JSON.stringify({ status: 'rejected' }) });
+                await apiCall(`/approvals/${id}/reject`, { method: 'POST' });
                 await loadApprovals();
+                await loadDashboard();
             } catch (error) { alert('Failed: ' + error.message); }
+        }
+
+        async function viewDocFromApproval(docId) {
+            showPage('analysis');
+            await loadAnalysisDocs();
+            // Wait for render then select the document
+            setTimeout(() => selectAnalysisDoc(docId), 100);
+        }
+
+        async function viewDocFromDashboard(docId) {
+            showPage('analysis');
+            await loadAnalysisDocs();
+            // Wait for render then select the document
+            setTimeout(() => selectAnalysisDoc(docId), 100);
         }
 
         // Settings
