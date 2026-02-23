@@ -542,3 +542,59 @@ async def get_processing_status(document_id: str) -> ProcessingStatusResponse:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get status: {str(e)}"
         )
+
+
+@router.get("/{document_id}/download")
+async def download_document(document_id: str):
+    """
+    Download document file from MinIO storage.
+    """
+    db = get_database_service()
+    storage = get_storage_service()
+
+    try:
+        document_uuid = UUID(document_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid document ID format"
+        )
+
+    try:
+        document = await db.get_document(str(document_uuid))
+        if not document:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Document not found"
+            )
+
+        if not document.minio_key:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="File not found in storage"
+            )
+
+        try:
+            file_data = storage.download_file(document.minio_key)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"File not found in storage: {str(e)}"
+            )
+
+        from fastapi.responses import Response
+        return Response(
+            content=file_data,
+            media_type=document.content_type,
+            headers={
+                "Content-Disposition": f"inline; filename={document.filename}"
+            }
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to download: {str(e)}"
+        )
