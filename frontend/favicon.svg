@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="14" fill="#12151a" stroke="#e8a935" stroke-width="2"/>
+
+  <!-- Document body -->
+  <rect x="10" y="8" width="12" height="16" rx="1" fill="#1a1e24" stroke="#e8a935" stroke-width="1.5"/>
+
+  <!-- Document fold corner -->
+  <path d="M18 8 L22 12 L18 12 Z" fill="#232830" stroke="#e8a935" stroke-width="1"/>
+
+  <!-- Document lines -->
+  <line x1="12" y1="11" x2="18" y2="11" stroke="#c48a20" stroke-width="1" stroke-linecap="round"/>
+  <line x1="12" y1="13" x2="17" y2="13" stroke="#c48a20" stroke-width="1" stroke-linecap="round"/>
+  <line x1="12" y1="15" x2="18" y2="15" stroke="#c48a20" stroke-width="1" stroke-linecap="round"/>
+  <line x1="12" y1="17" x2="16" y2="17" stroke="#c48a20" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- Cute face - eyes -->
+  <circle cx="13" cy="20" r="1.5" fill="#e8a935"/>
+  <circle cx="19" cy="20" r="1.5" fill="#e8a935"/>
+  <circle cx="13.2" cy="20.2" r="0.6" fill="#0a0c0f"/>
+  <circle cx="19.2" cy="20.2" r="0.6" fill="#0a0c0f"/>
+
+  <!-- Small smile -->
+  <path d="M15 22 Q16 23 17 22" stroke="#e8a935" stroke-width="1" stroke-linecap="round" fill="none"/>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="55" fill="#12151a" stroke="#e8a935" stroke-width="4"/>
+
+  <!-- Document body -->
+  <rect x="35" y="30" width="50" height="65" rx="4" fill="#1a1e24" stroke="#e8a935" stroke-width="3"/>
+
+  <!-- Document fold corner -->
+  <path d="M70 30 L85 45 L70 45 Z" fill="#232830" stroke="#e8a935" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Document lines -->
+  <line x1="42" y1="48" x2="70" y2="48" stroke="#c48a20" stroke-width="2" stroke-linecap="round"/>
+  <line x1="42" y1="55" x2="65" y2="55" stroke="#c48a20" stroke-width="2" stroke-linecap="round"/>
+  <line x1="42" y1="62" x2="70" y2="62" stroke="#c48a20" stroke-width="2" stroke-linecap="round"/>
+  <line x1="42" y1="69" x2="60" y2="69" stroke="#c48a20" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Cute face - eyes -->
+  <ellipse cx="48" cy="80" rx="5" ry="6" fill="#e8a935"/>
+  <ellipse cx="72" cy="80" rx="5" ry="6" fill="#e8a935"/>
+  <circle cx="49" cy="81" r="2" fill="#0a0c0f"/>
+  <circle cx="73" cy="81" r="2" fill="#0a0c0f"/>
+
+  <!-- Blush marks -->
+  <ellipse cx="42" cy="86" rx="4" ry="2" fill="#c48a20" opacity="0.5"/>
+  <ellipse cx="78" cy="86" rx="4" ry="2" fill="#c48a20" opacity="0.5"/>
+
+  <!-- Cute smile -->
+  <path d="M55 88 Q60 93 65 88" stroke="#e8a935" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Small antenna/feelers (like a cute bug/document creature) -->
+  <line x1="45" y1="30" x2="40" y2="18" stroke="#e8a935" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="40" cy="16" r="4" fill="#e8a935"/>
+
+  <line x1="75" y1="30" x2="80" y2="18" stroke="#e8a935" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="80" cy="16" r="4" fill="#e8a935"/>
+</svg>
